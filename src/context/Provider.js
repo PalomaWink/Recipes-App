@@ -2,8 +2,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
-import profileIcon from '../images/profileIcon.svg'
-import searchIcon from '../images/searchIcon.svg'
+import profileIcon from '../images/profileIcon.svg';
+import searchIcon from '../images/searchIcon.svg';
 
 const INICIAL_STATE = {
   email: '',
