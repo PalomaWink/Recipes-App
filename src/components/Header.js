@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import context from '../context/Context';
 
 function Header() {
-  const { headerState, setNotSearch, notSearch } = useContext();
+  const { headerState, setNotSearch, notSearch } = useContext(context);
 
   const handlerClick = () => {
     setNotSearch(!notSearch);
@@ -14,11 +15,12 @@ function Header() {
         <img src={ headerState.profile } alt="Profile" data-testid="profile-top-btn" />
       </Link>
       {headerState.renderHeader && (
-        <Link to="/search">
-          <img src={ headerState.searchIcon } alt="Search" data-testid="search-top-btn" />
-        </Link>
+        <div>
+          <button onClick={ handlerClick }>
+            <img src={ headerState.search } alt="Search" data-testid="search-top-btn" />
+          </button>
+        </div>
       )}
-      <button onClick={ handlerClick }>search</button>
     </header>
   );
 }

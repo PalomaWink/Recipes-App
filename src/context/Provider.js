@@ -4,22 +4,19 @@ import Context from './Context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-const INICIAL_STATE = {
-  email: '',
-  name: '',
-};
-
 const INICIAL_STATE_FOOD = {
-  inputTextSearchFoods: '',
-  inputRadioFoods: '',
+  inputSearch: '',
+  inputRadioIngredient: '',
+  inputRadio: '',
   ingredientFoods: [],
   nameFoods: [],
   firstLatterFoods: [],
 };
 
 const INICIAL_STATE_DRINKS = {
-  inputTextSearchDrinks: '',
-  inputRadioDrinks: '',
+  inputSearch: '',
+  inputRadioIngredient: '',
+  inputRadio: '',
   ingredientDrinks: [],
   nameDrinks: [],
   firstLatterDrinks: [],
@@ -28,10 +25,10 @@ const INICIAL_STATE_DRINKS = {
 const message = 'Sorry, we haven\'t found any recipes for these filters.';
 
 function Provider({ children }) {
-  const [state, setState] = useState(INICIAL_STATE);
+  const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE_FOOD);
   const [searchForDrinks, setSearchForDrinks] = useState(INICIAL_STATE_DRINKS);
-  const [notSearch, setNotSearch] = useState(true);
+  const [notSearch, setNotSearch] = useState(false);
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
@@ -103,12 +100,11 @@ function Provider({ children }) {
 
   // teste da função para ver se está sendo chamada corretamente
   useEffect(() => {
-    fetchDataFoods('Ingredient', 'chicken');
   }, []);
 
   const value = useMemo(() => ({
-    state,
-    setState,
+    email,
+    setEmail,
     searchForFoods,
     setSearchForFoods,
     searchForDrinks,
@@ -119,7 +115,7 @@ function Provider({ children }) {
     setHeaderState,
     notSearch,
     setNotSearch,
-  }), [state,
+  }), [email,
     searchForFoods,
     searchForDrinks, headerState, setHeaderState, notSearch, setNotSearch]);
 
