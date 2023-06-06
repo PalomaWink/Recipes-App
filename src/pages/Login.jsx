@@ -12,7 +12,7 @@ function Login(props) {
     const validateEmail = regex.test(email);
     const minPass = 6;
 
-    if (!(validateEmail && password.length >= minPass)) return true;
+    if (!(validateEmail && password.length > minPass)) return true;
   };
 
   const handleSubmit = () => {

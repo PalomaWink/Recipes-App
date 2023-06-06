@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
@@ -116,8 +115,13 @@ function Provider({ children }) {
     setSearchForDrinks,
     fetchDataDrinks,
     fetchDataFoods,
-    headerState, setHeaderState, notSearch, setNotSearch
-  }), [state, searchForFoods, searchForDrinks, headerState, setHeaderState, notSearch, setNotSearch]);
+    headerState,
+    setHeaderState,
+    notSearch,
+    setNotSearch,
+  }), [state,
+    searchForFoods,
+    searchForDrinks, headerState, setHeaderState, notSearch, setNotSearch]);
 
   return (
     <Context.Provider value={ value }>
