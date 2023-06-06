@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+import context from '../context/Context';
 
 function Login(props) {
   const { history } = props;
 
-  const [email, setEmail] = useState('');
+  const { email, setEmail } = useContext(context);
   const [password, setPassword] = useState('');
 
   const validateInputs = () => {
@@ -24,7 +25,7 @@ function Login(props) {
     <section>
       <input
         type="email"
-        value={ email }
+        value={ email.email }
         data-testid="email-input"
         onChange={ ({ target }) => setEmail(target.value) }
         placeholder="Insira seu Email"
