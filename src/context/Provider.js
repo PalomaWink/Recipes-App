@@ -1,6 +1,9 @@
+
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
+import profileIcon from '../images/profileIcon.svg'
+import searchIcon from '../images/searchIcon.svg'
 
 const INICIAL_STATE = {
   email: '',
@@ -29,6 +32,9 @@ function Provider({ children }) {
   const [state, setState] = useState(INICIAL_STATE);
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE_FOOD);
   const [searchForDrinks, setSearchForDrinks] = useState(INICIAL_STATE_DRINKS);
+  const [notSearch, setNotSearch] = useState(true);
+  const [headerState, setHeaderState] = useState({
+    profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
   // chamar a função no botão e compartilhar o estado nos headers adjacentes
   const fetchDataFoods = async (search, inputText) => {
@@ -110,7 +116,8 @@ function Provider({ children }) {
     setSearchForDrinks,
     fetchDataDrinks,
     fetchDataFoods,
-  }), [state, searchForFoods, searchForDrinks]);
+    headerState, setHeaderState, notSearch, setNotSearch
+  }), [state, searchForFoods, searchForDrinks, headerState, setHeaderState, notSearch, setNotSearch]);
 
   return (
     <Context.Provider value={ value }>
