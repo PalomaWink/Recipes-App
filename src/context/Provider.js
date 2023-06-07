@@ -6,7 +6,6 @@ import searchIcon from '../images/searchIcon.svg';
 
 const INICIAL_STATE_FOOD = {
   inputSearch: '',
-  inputRadioIngredient: '',
   inputRadio: '',
   ingredientFoods: [],
   nameFoods: [],
@@ -15,7 +14,6 @@ const INICIAL_STATE_FOOD = {
 
 const INICIAL_STATE_DRINKS = {
   inputSearch: '',
-  inputRadioIngredient: '',
   inputRadio: '',
   ingredientDrinks: [],
   nameDrinks: [],
@@ -127,5 +125,10 @@ function Provider({ children }) {
 }
 Provider.propTypes = {
   children: PropTypes.element.isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }),
+  }).isRequired,
 };
 export default Provider;
