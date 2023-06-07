@@ -1,10 +1,20 @@
 // import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import context from '../context/Context';
 
 // importar para o header e criar estados locais
 function SearchBar() {
   const { searchForFoods, setSearchForFoods } = useContext(context);
+  const { history: { location: { pathname } } } = props;
+
+  const { inputSearch, inputRadio } = searchForFoods;
+  const searchApi = async () => {
+    if (pathname === '/meals') {
+      const food = fetchDataFoods(inputRadio, inputSearch);
+      console.log(await food);
+    }
+  };
 
   const handleChangeColuns = ({ target }) => {
     setSearchForFoods({
@@ -18,51 +28,46 @@ function SearchBar() {
           id="inputSearch"
           name="inputSearch"
           data-testid="search-input"
-          value={ searchForFoods.inputTextSearchFoods }
+          value={ searchForFoods.inputSearch }
           placeholder="Search"
           onChange={ handleChangeColuns }
         />
       </label>
-      <label htmlFor="inputRadioIngredient">
-        Ingredient
-        <input
-          data-testid="ingredient-search-radio"
-          type="radio"
-          id="inputRadioIngredient"
-          name="inputRadio"
-          value="Ingredient"
-          checked={ searchForFoods.inputRadio === 'Ingredient' }
-          onChange={ handleChangeColuns }
-        />
-      </label>
-      <label htmlFor="inputRadioIngredient">
-        Name
-        <input
-          data-testid="name-search-radio"
-          type="radio"
-          id="inputRadioName"
-          name="inputRadio"
-          value="Name"
-          checked={ searchForFoods.inputRadio === 'Name' }
-          onChange={ handleChangeColuns }
-        />
-      </label>
-      <label htmlFor="inputFirstLetter">
-        First letter
-        <input
-          data-testid="first-letter-search-radio"
-          type="radio"
-          id="inputFirstLetter"
-          name="inputRadio"
-          value="FirstLetter"
-          checked={ searchForFoods.inputRadio === 'FirstLetter' }
-          onChange={ handleChangeColuns }
-        />
-      </label>
+      <input
+        data-testid="ingredient-search-radio"
+        type="radio"
+        id="inputRadioIngredient"
+        name="inputRadio"
+        value="Ingredient"
+        checked={ searchForFoods.inputRadio === 'Ingredient' }
+        onChange={ handleChangeColuns }
+      />
+      <label htmlFor="inputRadioIngredient">Ingredient</label>
+
+      <input
+        data-testid="name-search-radio"
+        type="radio"
+        id="inputRadioName"
+        name="inputRadio"
+        value="Name"
+        checked={ searchForFoods.inputRadio === 'Name' }
+        onChange={ handleChangeColuns }
+      />
+      <label htmlFor="inputRadioName">Name</label>
+      <input
+        data-testid="first-letter-search-radio"
+        type="radio"
+        id="inputFirstLetter"
+        name="inputRadio"
+        value="FirstLetter"
+        checked={ searchForFoods.inputRadio === 'FirstLetter' }
+        onChange={ handleChangeColuns }
+      />
+      <label htmlFor="inputFirstLetter">First letter</label>
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={ () => {} }
+        onClick={ searchApi }
       >
         Search
       </button>
@@ -70,11 +75,10 @@ function SearchBar() {
   );
 }
 
-// SearchBar.propTypes = {
-//   valueInputText: PropTypes.string.isRequired,
-//   valueInputRadio: PropTypes.string.isRequired,
-//   handleChange: PropTypes.func.isRequired,
-//   fetchFood: PropTypes.func.isRequired,
-// };
+SearchBar.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.string,
+  }),
+}.isRequired;
 
 export default SearchBar;
