@@ -15,7 +15,7 @@ export default function Recipes(props) {
         title: pathname === '/meals' ? 'Meals' : 'Drinks' });
     };
     updateState();
-  }, []);
+  }, [headerState, pathname, setHeaderState]);
 
   return (
     <div>

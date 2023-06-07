@@ -12,7 +12,7 @@ export default function FavoriteRecipes() {
         renderHeader: false });
     };
     updateState();
-  }, []);
+  }, [headerState, setHeaderState]);
   return (
     <div>
       <Header />

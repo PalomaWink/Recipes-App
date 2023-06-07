@@ -12,7 +12,7 @@ export default function DoneRecipes() {
         renderHeader: false });
     };
     updateState();
-  }, []);
+  }, [headerState, setHeaderState]);
   return (
     <div>
       <Header />
