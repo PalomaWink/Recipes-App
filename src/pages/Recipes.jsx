@@ -7,11 +7,12 @@ import Meals from '../components/Meals';
 import Drinks from '../components/Drinks';
 
 export default function Recipes(props) {
-  const { history: { location: { pathname } } } = props;
+  const { history } = props;
   const { headerState,
     setHeaderState, notSearch } = useContext(context);
 
   useEffect(() => {
+    const { location: { pathname } } = history;
     const updateState = () => {
       setHeaderState({ ...headerState,
         title: pathname === '/meals' ? 'Meals' : 'Drinks' });

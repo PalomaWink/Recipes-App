@@ -9,17 +9,8 @@ import Profile from './pages/Profile';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import Footer from './components/Footer';
-// import SearchBar from './components/SearchBar';
 
 function App() {
-  // const location = useLocation();
-  // const matchMeals = location.pathname.includes('/meals');
-  // const matchDrinks = location.pathname.includes('/drinks');
-  // const matchProfile = location.pathname === '/profile';
-
-  // const showFooter = matchMeals
-  //   || matchDrinks
-  //   || matchProfile;
   return (
     <div>
       <Switch>
@@ -35,7 +26,6 @@ function App() {
         <Route path="/favorite-recipes" component={ FavoriteRecipes } />
       </Switch>
       <Footer />
-      {/* {showFooter && <Footer />} */}
     </div>
   );
 }
