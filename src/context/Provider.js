@@ -1,121 +1,106 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation, useHistory } from 'react-router-dom';
 import Context from './Context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-const INICIAL_STATE_FOOD = {
+// criar estado para cada
+const INICIAL_STATE = {
   inputSearch: '',
   inputRadio: '',
-  ingredientFoods: [],
-  nameFoods: [],
-  firstLatterFoods: [],
+  results: [],
 };
 
-const INICIAL_STATE_DRINKS = {
-  inputSearch: '',
-  inputRadio: '',
-  ingredientDrinks: [],
-  nameDrinks: [],
-  firstLatterDrinks: [],
-};
+const URL_INGREDIENT_MEALS = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=';
+const URL_NAME_FOODS_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+const URL_FIRST_LETTER_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?f=';
+
+const URL_INGREDIENT_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=';
+const URL_NAME_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+const URL_FIRST_LETTER_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
 
 const message = 'Sorry, we haven\'t found any recipes for these filters.';
 
 function Provider({ children }) {
+  const location = useLocation();
+  const history = useHistory();
+
   const [email, setEmail] = useState('');
-  const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE_FOOD);
-  const [searchForDrinks, setSearchForDrinks] = useState(INICIAL_STATE_DRINKS);
+  const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
-  // chamar a função no botão e compartilhar o estado nos headers adjacentes
-  const fetchDataFoods = async (search, inputText) => {
-    // além de pegar o valor do inputradio, deve linkar do input txt
-    const URL_INGREDIENT = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${inputText}`;
-    const URL_NAME = `https://www.themealdb.com/api/json/v1/1/search.php?s=${inputText}`;
-    const URL_FIRST_LETTER = `https://www.themealdb.com/api/json/v1/1/search.php?f=${inputText}`;
+  const fetchApi = useCallback(async (url) => {
+    const result = await fetch(url);
+    const data = await result.json();
+    const { meals, drinks } = data;
+    // tentativa de alert
+    if (!meals || !drinks) {
+      return global.alert(message);
+    }
+    if (location.pathname === '/meals') {
+      if (meals.length === 1) {
+        history.push(`/meals/${data.meals[0].idMeal}`);
+      }
+      return data.meals;
+    }
+    if (location.pathname === '/drinks') {
+      if (drinks.length === 1) {
+        history.push(`/drinks/${data.drinks[0].idDrink}`);
+      }
+      return data.drinks;
+    }
+  }, [history, location]);
 
-    if (search === 'Ingredient') {
-      const result = await fetch(URL_INGREDIENT);
-      const data = await result.json();
-      // console.log(searchForFoods);
-      if (data.length === 0) {
-        global.alert(message);
-      }
-      setSearchForFoods([{ ingredientFoods: data.meals[0] }]);
-    }
-    if (search === 'Name') {
-      const result = await fetch(URL_NAME);
-      const data = await result.json();
-      if (data.length === 0) {
-        global.alert(message);
-      }
-      setSearchForFoods([{ nameFoods: data.meals[0] }]);
-    }
-    if (search === 'FirstLetter') {
-      if (inputText.length > 1) {
+  const fetchData = useCallback(async (search, inputText) => {
+    let { results } = searchForFoods;
+
+    const urlIngredient = location.pathname === '/meals'
+      ? `${URL_INGREDIENT_MEALS}${inputText}` : `${URL_INGREDIENT_DRINK}${inputText}`;
+
+    const urlName = location.pathname === '/meals' ? `${URL_NAME_FOODS_MEALS}${inputText}`
+      : `${URL_NAME_DRINK}${inputText}`;
+
+    const urlFN = location.pathname === '/meals' ? `${URL_FIRST_LETTER_MEALS}${inputText}`
+      : `${URL_FIRST_LETTER_DRINK}${inputText}`;
+
+    switch (search) {
+    case 'Ingredient':
+      results = await fetchApi(urlIngredient);
+      setSearchForFoods({ ...searchForFoods, results });
+      break;
+    case 'Name':
+      results = await fetchApi(urlName);
+      setSearchForFoods({ ...searchForFoods, results });
+      break;
+    case 'FirstLetter':
+      if (inputText.length > 1 && urlFN) {
         global.alert('Your search must have only 1 (one) character');
       }
-      const result = await fetch(URL_FIRST_LETTER);
-      const data = await result.json();
-      setSearchForFoods([{ firstLatterFoods: data.meals[0] }]);
+      results = await fetchApi(urlFN);
+      setSearchForFoods({ ...searchForFoods, results });
+      break;
+    default:
+      setSearchForFoods({ ...searchForFoods });
+      break;
     }
-  };
-
-  // chamar a função no botão e compartilhar o estado nos headers adjacentes
-  const fetchDataDrinks = async (search, inputText) => {
-    // além de pegar o valor do inputradio, dv linkar do input txt
-    const URL_INGREDIENT = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${inputText}`;
-    const URL_NAME = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputText}`;
-    const URL_FIRST_LETTER = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${inputText}`;
-    if (search === 'Ingredient') {
-      const result = await fetch(URL_INGREDIENT);
-      const data = await result.json();
-      if (data.length === 0) {
-        global.alert(message);
-      }
-      setSearchForFoods([{ ingredientFoods: data.meals[0] }]);
-    }
-    if (search === 'Name') {
-      const result = await fetch(URL_NAME);
-      const data = await result.json();
-      if (data.length === 0) {
-        global.alert(message);
-      }
-      setSearchForFoods([{ nameFoods: data.meals[0] }]);
-    }
-    if (search === 'FirstLetter') {
-      if (inputText.length > 1) {
-        global.alert('Your search must have only 1 (one) character');
-      }
-      const result = await fetch(URL_FIRST_LETTER);
-      const data = await result.json();
-      setSearchForFoods([{ firstLatterFoods: data.meals[0] }]);
-    }
-  };
-
-  // teste da função para ver se está sendo chamada corretamente
-  useEffect(() => {
-  }, []);
+  }, [searchForFoods, location, fetchApi]);
 
   const value = useMemo(() => ({
     email,
     setEmail,
     searchForFoods,
     setSearchForFoods,
-    searchForDrinks,
-    setSearchForDrinks,
-    fetchDataDrinks,
-    fetchDataFoods,
+    fetchData,
     headerState,
     setHeaderState,
     notSearch,
     setNotSearch,
   }), [email,
     searchForFoods,
-    searchForDrinks, headerState, setHeaderState, notSearch, setNotSearch]);
+    headerState, setHeaderState, notSearch, setNotSearch, fetchData]);
 
   return (
     <Context.Provider value={ value }>
@@ -125,10 +110,5 @@ function Provider({ children }) {
 }
 Provider.propTypes = {
   children: PropTypes.element.isRequired,
-  history: PropTypes.shape({
-    location: PropTypes.shape({
-      pathname: PropTypes.string,
-    }),
-  }).isRequired,
 };
 export default Provider;
