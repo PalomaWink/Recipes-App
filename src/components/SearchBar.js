@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import context from '../context/Context';
 
 // importar para o header e criar estados locais
-function SearchBar() {
+function SearchBar(props) {
   const { searchForFoods, setSearchForFoods } = useContext(context);
   const { history: { location: { pathname } } } = props;
 
