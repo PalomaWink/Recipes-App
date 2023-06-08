@@ -4,9 +4,11 @@ import { useLocation } from 'react-router-dom';
 import context from '../context/Context';
 
 // importar para o header e criar estados locais
+
 export default function SearchBar() {
   const { searchForFoods, setSearchForFoods, fetchData } = useContext(context);
   const location = useLocation();
+
 
   const { inputSearch, inputRadio } = searchForFoods;
   const searchApi = async () => {
