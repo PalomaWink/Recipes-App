@@ -1,18 +1,20 @@
-// import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import context from '../context/Context';
 
 // importar para o header e criar estados locais
-function SearchBar() {
-  const { searchForFoods, setSearchForFoods } = useContext(context);
-  const { history: { location: { pathname } } } = props;
+export default function SearchBar() {
+  const { searchForFoods, setSearchForFoods, fetchData } = useContext(context);
+  const location = useLocation();
 
   const { inputSearch, inputRadio } = searchForFoods;
   const searchApi = async () => {
-    if (pathname === '/meals') {
-      const food = fetchDataFoods(inputRadio, inputSearch);
-      console.log(await food);
+    if (location.pathname === '/meals') {
+      await fetchData(inputRadio, inputSearch);
+    }
+    if (location.pathname === '/drinks') {
+      await fetchData(inputRadio, inputSearch);
     }
   };
 
@@ -77,8 +79,8 @@ function SearchBar() {
 
 SearchBar.propTypes = {
   history: PropTypes.shape({
-    push: PropTypes.string,
-  }),
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }),
+  }).isRequired,
 }.isRequired;
-
-export default SearchBar;
