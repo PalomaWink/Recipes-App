@@ -9,7 +9,6 @@ export default function SearchBar() {
   const { searchForFoods, setSearchForFoods, fetchData } = useContext(context);
   const location = useLocation();
 
-
   const { inputSearch, inputRadio } = searchForFoods;
   const searchApi = async () => {
     if (location.pathname === '/meals') {
