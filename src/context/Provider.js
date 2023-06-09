@@ -33,24 +33,28 @@ function Provider({ children }) {
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
   const fetchApi = useCallback(async (url) => {
-    const result = await fetch(url);
-    const data = await result.json();
-    const { meals, drinks } = data;
-    // tentativa de alert
-    if (!meals || !drinks) {
-      return global.alert(message);
-    }
-    if (location.pathname === '/meals') {
-      if (meals.length === 1) {
-        history.push(`/meals/${data.meals[0].idMeal}`);
+    try {
+      const result = await fetch(url);
+      const data = await result.json();
+      const { meals, drinks } = data;
+      // tentativa de alert
+      if (!meals || !drinks) {
+        return global.alert(message);
       }
-      return data.meals;
-    }
-    if (location.pathname === '/drinks') {
-      if (drinks.length === 1) {
-        history.push(`/drinks/${data.drinks[0].idDrink}`);
+      if (location.pathname === '/meals') {
+        if (meals.length === 1) {
+          history.push(`/meals/${data.meals[0].idMeal}`);
+        }
+        return data.meals;
       }
-      return data.drinks;
+      if (location.pathname === '/drinks') {
+        if (drinks.length === 1) {
+          history.push(`/drinks/${data.drinks[0].idDrink}`);
+        }
+        return data.drinks;
+      }
+    } catch (error) {
+      // console.error(message.error);
     }
   }, [history, location]);
 
