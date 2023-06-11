@@ -20,8 +20,6 @@ const URL_INGREDIENT_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/filter
 const URL_NAME_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const URL_FIRST_LETTER_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
 
-const message = 'Sorry, we haven\'t found any recipes for these filters.';
-
 function Provider({ children }) {
   const location = useLocation();
   const history = useHistory();
@@ -29,6 +27,7 @@ function Provider({ children }) {
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
+
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
@@ -36,21 +35,25 @@ function Provider({ children }) {
     const result = await fetch(url);
     const data = await result.json();
     const { meals, drinks } = data;
+
     // tentativa de alert
-    if (!meals || !drinks) {
-      return global.alert(message);
-    }
-    if (location.pathname === '/meals') {
-      if (meals.length === 1) {
-        history.push(`/meals/${data.meals[0].idMeal}`);
+    const message = 'Sorry, we haven\'t found any recipes for these filters.';
+
+    if (meals !== null && drinks !== null) {
+      if (location.pathname === '/meals') {
+        if (meals.length === 1) {
+          history.push(`/meals/${data.meals[0].idMeal}`);
+        }
+        return data.meals;
       }
-      return data.meals;
-    }
-    if (location.pathname === '/drinks') {
-      if (drinks.length === 1) {
-        history.push(`/drinks/${data.drinks[0].idDrink}`);
+      if (location.pathname === '/drinks') {
+        if (drinks.length === 1) {
+          history.push(`/drinks/${data.drinks[0].idDrink}`);
+        }
+        return data.drinks;
       }
-      return data.drinks;
+    } else {
+      global.alert(message);
     }
   }, [history, location]);
 
@@ -94,13 +97,12 @@ function Provider({ children }) {
     searchForFoods,
     setSearchForFoods,
     fetchData,
+    fetchApi,
     headerState,
     setHeaderState,
     notSearch,
     setNotSearch,
-  }), [email,
-    searchForFoods,
-    headerState, setHeaderState, notSearch, setNotSearch, fetchData]);
+  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch]);
 
   return (
     <Context.Provider value={ value }>
