@@ -20,12 +20,11 @@ const URL_INGREDIENT_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/filter
 const URL_NAME_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const URL_FIRST_LETTER_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
 
-const message = 'Sorry, we haven\'t found any recipes for these filters.';
+// const message = 'Sorry, we haven\'t found any recipes for these filters.';
 
 function Provider({ children }) {
   const location = useLocation();
   const history = useHistory();
-
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
@@ -38,9 +37,9 @@ function Provider({ children }) {
       const data = await result.json();
       const { meals, drinks } = data;
       // tentativa de alert
-      if (!meals || !drinks) {
-        return global.alert(message);
-      }
+      // if (!meals || !drinks) {
+      //   return global.alert(message);
+      // }
       if (location.pathname === '/meals') {
         if (meals.length === 1) {
           history.push(`/meals/${data.meals[0].idMeal}`);
@@ -92,6 +91,7 @@ function Provider({ children }) {
     }
   }, [searchForFoods, location, fetchApi]);
 
+  console.log(searchForFoods);
   const value = useMemo(() => ({
     email,
     setEmail,
