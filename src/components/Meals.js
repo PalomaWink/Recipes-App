@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
 
 export default function Meals() {
@@ -6,6 +7,7 @@ export default function Meals() {
   const { results } = searchForFoods;
   const [category, setCategory] = useState([]);
   const [activeFilter, setActiveFilter] = useState(true);
+  const [requestApi, setRequestApi] = useState([]);
 
   const five = 5;
   const categoryFive = category ? category.slice(0, five) : [];
@@ -20,7 +22,9 @@ export default function Meals() {
   const fetchApi = async () => {
     const result = await fetch(url);
     const data = await result.json();
-    setSearchForFoods({ ...searchForFoods, results: data.meals });
+    const { meals } = data;
+    setRequestApi(meals);
+    setSearchForFoods({ ...searchForFoods, results: meals });
   };
 
   useEffect(() => {
@@ -44,12 +48,12 @@ export default function Meals() {
       const { meals } = data;
       setSearchForFoods({ ...searchForFoods, results: meals });
     } else {
-      await fetchApi();
+      setSearchForFoods({ ...searchForFoods, results: requestApi });
     }
   };
 
   const handlClickAll = async () => {
-    await fetchApi();
+    setSearchForFoods({ ...searchForFoods, results: requestApi });
   };
 
   return (
@@ -75,12 +79,15 @@ export default function Meals() {
       {
         returnsTwelve.map((intem, index) => (
           <div key={ intem.idMeal } data-testid={ `${index}-recipe-card` }>
-            <h3 data-testid={ `${index}-card-name` }>{intem.strMeal}</h3>
-            <img
-              src={ intem.strMealThumb }
-              alt="Profile"
-              data-testid={ `${index}-card-img` }
-            />
+            <Link to={ `/meals/${intem.idMeal}` }>
+              <h3 data-testid={ `${index}-card-name` }>{intem.strMeal}</h3>
+              <img
+                src={ intem.strMealThumb }
+                alt="Profile"
+                data-testid={ `${index}-card-img` }
+              />
+            </Link>
+
           </div>
         ))
       }

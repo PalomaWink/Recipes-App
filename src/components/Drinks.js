@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
 
 export default function Drinks() {
@@ -6,6 +7,7 @@ export default function Drinks() {
   const { results } = searchForFoods;
   const [category, setCategory] = useState([]);
   const [activeFilter, setActiveFilter] = useState(true);
+  const [requestApi, setRequestApi] = useState([]);
 
   const twelve = 12;
   const returnsTwelve = results ? results.slice(0, twelve) : [];
@@ -20,7 +22,9 @@ export default function Drinks() {
   const fetchApi = async () => {
     const result = await fetch(url);
     const data = await result.json();
-    setSearchForFoods({ ...searchForFoods, results: data.drinks });
+    const { drinks } = data;
+    setRequestApi(drinks);
+    setSearchForFoods({ ...searchForFoods, results: drinks });
   };
 
   useEffect(() => {
@@ -43,12 +47,12 @@ export default function Drinks() {
       const { drinks } = data;
       setSearchForFoods({ ...searchForFoods, results: drinks });
     } else {
-      await fetchApi();
+      setSearchForFoods({ ...searchForFoods, results: requestApi });
     }
   };
 
   const handlClickAll = async () => {
-    await fetchApi();
+    setSearchForFoods({ ...searchForFoods, results: requestApi });
   };
 
   return (
@@ -73,12 +77,15 @@ export default function Drinks() {
       {
         returnsTwelve.map((intem, index) => (
           <div key={ intem.idDrink } data-testid={ `${index}-recipe-card` }>
-            <h3 data-testid={ `${index}-card-name` }>{intem.strDrink}</h3>
-            <img
-              src={ intem.strDrinkThumb }
-              alt="Profile"
-              data-testid={ `${index}-card-img` }
-            />
+            <Link to={ `/drinks/${intem.idDrink}` }>
+              <h3 data-testid={ `${index}-card-name` }>{intem.strDrink}</h3>
+              <img
+                src={ intem.strDrinkThumb }
+                alt="Profile"
+                data-testid={ `${index}-card-img` }
+              />
+            </Link>
+
           </div>
         ))
       }
