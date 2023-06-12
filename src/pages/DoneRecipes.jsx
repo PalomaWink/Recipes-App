@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 // import shareIcon from '../images/shareIcon.svg';
 import Header from '../components/Header';
-// import context from '../context/Context';
+import context from '../context/Context';
 
 export default function DoneRecipes() {
-  // const { headerState, setHeaderState } = useContext(context);
+  const { headerState, setHeaderState } = useContext(context);
   // criei um mock para testar
   // const results = [
   //   {
@@ -73,11 +73,11 @@ export default function DoneRecipes() {
   // };
 
   useEffect(() => {
-    // const updateState = () => {
-    //   setHeaderState({ ...headerState,
-    //     title: 'Done Recipes',
-    //     renderHeader: false });
-    // };
+    const updateState = () => {
+      setHeaderState({ ...headerState,
+        title: 'Done Recipes',
+        renderHeader: false });
+    };
     // // Filtra as receitas com base no filtro selecionado
     // const filterRecipes = () => {
     //   if (filter === 'all') {
@@ -91,7 +91,7 @@ export default function DoneRecipes() {
     //   }
     // };
     // filterRecipes();
-    // updateState();
+    updateState();
   }, []);
 
   return (
