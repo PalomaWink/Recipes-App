@@ -32,6 +32,7 @@ function Provider({ children }) {
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
   const fetchApi = useCallback(async (url) => {
+
     const result = await fetch(url);
     const data = await result.json();
     const { meals, drinks } = data;
@@ -46,14 +47,34 @@ function Provider({ children }) {
         }
         return data.meals;
       }
+
+    try {
+      const result = await fetch(url);
+      const data = await result.json();
+      const { meals, drinks } = data;
+      // tentativa de alert
+      if (!meals || !drinks) {
+        return global.alert(message);
+      }
+      if (location.pathname === '/meals') {
+        if (meals.length === 1) {
+          history.push(`/meals/${data.meals[0].idMeal}`);
+        }
+        return data.meals;
+      }
+
       if (location.pathname === '/drinks') {
         if (drinks.length === 1) {
           history.push(`/drinks/${data.drinks[0].idDrink}`);
         }
         return data.drinks;
       }
+
     } else {
       global.alert(message);
+
+    } catch (error) {
+      // console.error(message.error);
     }
   }, [history, location]);
 
