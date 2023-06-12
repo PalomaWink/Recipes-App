@@ -23,7 +23,6 @@ const URL_FIRST_LETTER_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/sear
 function Provider({ children }) {
   const location = useLocation();
   const history = useHistory();
-
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
@@ -37,6 +36,7 @@ function Provider({ children }) {
       const result = await fetch(url);
       const data = await result.json();
       const { meals, drinks } = data;
+
       if (meals !== null && drinks !== null) {
         if (location.pathname === '/meals') {
           if (meals.length === 1) {
@@ -93,6 +93,7 @@ function Provider({ children }) {
     }
   }, [searchForFoods, location, fetchApi]);
 
+  console.log(searchForFoods);
   const value = useMemo(() => ({
     email,
     setEmail,
