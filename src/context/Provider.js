@@ -30,53 +30,34 @@ function Provider({ children }) {
 
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
+  console.log(notSearch);
 
   const fetchApi = useCallback(async (url) => {
-
-    const result = await fetch(url);
-    const data = await result.json();
-    const { meals, drinks } = data;
-
-    // tentativa de alert
-    const message = 'Sorry, we haven\'t found any recipes for these filters.';
-
-    if (meals !== null && drinks !== null) {
-      if (location.pathname === '/meals') {
-        if (meals.length === 1) {
-          history.push(`/meals/${data.meals[0].idMeal}`);
-        }
-        return data.meals;
-      }
-
     try {
       const result = await fetch(url);
       const data = await result.json();
       const { meals, drinks } = data;
-      // tentativa de alert
-      if (!meals || !drinks) {
-        return global.alert(message);
-      }
-      if (location.pathname === '/meals') {
-        if (meals.length === 1) {
-          history.push(`/meals/${data.meals[0].idMeal}`);
+      if (meals !== null && drinks !== null) {
+        if (location.pathname === '/meals') {
+          if (meals.length === 1) {
+            history.push(`/meals/${data.meals[0].idMeal}`);
+          }
+          return data.meals;
         }
-        return data.meals;
-      }
-
-      if (location.pathname === '/drinks') {
-        if (drinks.length === 1) {
-          history.push(`/drinks/${data.drinks[0].idDrink}`);
+        if (location.pathname === '/drinks') {
+          if (drinks.length === 1) {
+            history.push(`/drinks/${data.drinks[0].idDrink}`);
+          }
+          return data.drinks;
         }
-        return data.drinks;
+      } else {
+        const message = 'Sorry, we haven\'t found any recipes for these filters.';
+        global.alert(message);
       }
-
-    } else {
-      global.alert(message);
-
     } catch (error) {
-      // console.error(message.error);
+      // console.log(error);
     }
-  }, [history, location]);
+  }, [history, location.pathname]);
 
   const fetchData = useCallback(async (search, inputText) => {
     let { results } = searchForFoods;
