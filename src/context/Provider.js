@@ -30,6 +30,7 @@ function Provider({ children }) {
 
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
+  console.log(notSearch);
 
   const fetchApi = useCallback(async (url) => {
     try {
