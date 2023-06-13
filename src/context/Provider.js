@@ -26,6 +26,7 @@ function Provider({ children }) {
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
+  const [requestApi, setRequestApi] = useState([]);
 
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
@@ -71,6 +72,9 @@ function Provider({ children }) {
     const urlFN = location.pathname === '/meals' ? `${URL_FIRST_LETTER_MEALS}${inputText}`
       : `${URL_FIRST_LETTER_DRINK}${inputText}`;
 
+    const url = location.pathname === '/meals' ? `${URL_NAME_FOODS_MEALS}`
+      : `${URL_NAME_DRINK}`;
+
     switch (search) {
     case 'Ingredient':
       results = await fetchApi(urlIngredient);
@@ -88,7 +92,10 @@ function Provider({ children }) {
       setSearchForFoods({ ...searchForFoods, results });
       break;
     default:
-      setSearchForFoods({ ...searchForFoods });
+      results = await fetchApi(url);
+      console.log(results);
+      setRequestApi(results);
+      setSearchForFoods({ ...searchForFoods, results });
       break;
     }
   }, [searchForFoods, location, fetchApi]);
@@ -105,7 +112,8 @@ function Provider({ children }) {
     setHeaderState,
     notSearch,
     setNotSearch,
-  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch]);
+    requestApi,
+  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch, requestApi]);
 
   return (
     <Context.Provider value={ value }>
