@@ -7,6 +7,26 @@ export default function RecipeDetails() {
   const location = useLocation();
   const [fetchApi, setFetchApi] = useState([]);
   const [isMeals, setIsMeals] = useState('');
+  const [recommendationMeals, setrecommendationMeals] = useState([]);
+  const [setrecommendationDrinks] = useState([]);
+
+  const path = location.pathname.split('/')[1];
+  const recommendation = async () => {
+    const URL_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+    const URL_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+    if (path === 'meals') {
+      const result = await fetch(URL_DRINKS);
+      const data = await result.json();
+      console.log(data.drinks);
+      return setrecommendationMeals(data.drinks);
+    }
+    if (path === 'drinks') {
+      const result = await fetch(URL_MEALS);
+      const data = await result.json();
+      return setrecommendationDrinks(data.meals);
+    }
+  };
+
   useEffect(() => {
     const urlParts = location.pathname.split('/');
     const conditional = urlParts[1] === 'meals';
@@ -26,6 +46,7 @@ export default function RecipeDetails() {
       }
     };
     fetchRecipe(urlId);
+    recommendation();
   }, [location.pathname]);
 
   const getIngredientsList = (recipe) => {
@@ -39,7 +60,6 @@ export default function RecipeDetails() {
         ingredientsList.push(`${ingredient} - ${measure}`);
       }
     }
-    console.log(fetchApi);
 
     return ingredientsList;
   };
@@ -71,7 +91,6 @@ export default function RecipeDetails() {
           {
             isMeals ? (
               <div>
-
                 <video src={ recipes.strYoutube } data-testid="video" controls>
                   <track
                     kind="captions"
@@ -88,6 +107,23 @@ export default function RecipeDetails() {
           }
         </div>
       ))}
+      <div>
+        <h2>Recommended</h2>
+        <div style={ { overflowX: 'scroll', whiteSpace: 'nowrap' } }>
+          {/*  {Object.values(recommendationMeals).slice(0, 6).map((key, index) => {
+            if (index % 2 === 0) {
+              return (
+                <div key={ key.idDrink }>
+                  <img src={ recommendationMeals[key.strDrinkThumb] } alt="imagem" />
+                  {index + 1 < Object.values(recommendationMeals).slice(0, 6).length && (
+                    <p>{recommendationMeals[Object.values(recommendationMeals).slice(0, 6)[index + 1]]}</p>
+                  )}
+                </div>
+              );
+            }
+          })} */}
+        </div>
+      </div>
     </div>
   );
 }

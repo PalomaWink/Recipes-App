@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
 
 export default function Drinks() {
-  const { searchForFoods,
-    setSearchForFoods,
-    fetchData, requestApi } = useContext(context);
-  const { results } = searchForFoods;
+  const { fetchData, requestApi, setResults, results } = useContext(context);
+
   const [category, setCategory] = useState([]);
   const [activeFilter, setActiveFilter] = useState(true);
 
@@ -37,14 +35,14 @@ export default function Drinks() {
       const result = await fetch(searchApi);
       const data = await result.json();
       const { drinks } = data;
-      setSearchForFoods({ ...searchForFoods, results: drinks });
+      setResults(drinks);
     } else {
-      setSearchForFoods({ ...searchForFoods, results: requestApi });
+      setResults(requestApi);
     }
   };
 
   const handlClickAll = async () => {
-    setSearchForFoods({ ...searchForFoods, results: requestApi });
+    setResults(requestApi);
   };
 
   return (
