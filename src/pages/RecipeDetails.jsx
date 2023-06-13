@@ -6,22 +6,26 @@ export default function RecipeDetails() {
   const URL_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
   const location = useLocation();
   const [fetchApi, setFetchApi] = useState([]);
+  const [isMeals, setIsMeals] = useState('');
   useEffect(() => {
-    const fetchRecipe = async () => {
-      const urlParts = location.pathname.split('/'); // Divide a URL nos diferentes segmentos
-      const urlId = urlParts[urlParts.length - 1];
-      if (location.pathname === `/meals/${urlId}`) {
-        const result = await fetch(`${URL_FOOD}${urlId}`);
+    const urlParts = location.pathname.split('/');
+    const conditional = urlParts[1] === 'meals';
+    const urlId = urlParts[urlParts.length - 1];
+
+    setIsMeals(conditional);
+    const fetchRecipe = async (id) => {
+      if (location.pathname === `/meals/${id}`) {
+        const result = await fetch(`${URL_FOOD}${id}`);
         const data = await result.json();
         setFetchApi(data.meals);
       }
-      if (location.pathname === `/drinks/${urlId}`) {
-        const result = await fetch(`${URL_DRINK}${urlId}`);
+      if (location.pathname === `/drinks/${id}`) {
+        const result = await fetch(`${URL_DRINK}${id}`);
         const data = await result.json();
         setFetchApi(data.drinks);
       }
     };
-    fetchRecipe();
+    fetchRecipe(urlId);
   }, [location.pathname]);
 
   const getIngredientsList = (recipe) => {
@@ -35,6 +39,7 @@ export default function RecipeDetails() {
         ingredientsList.push(`${ingredient} - ${measure}`);
       }
     }
+    console.log(fetchApi);
 
     return ingredientsList;
   };
@@ -55,7 +60,7 @@ export default function RecipeDetails() {
           <ul data-testid={ `${index}-ingredient-name-and-measure` }>
             <strong>Ingredients:</strong>
             {getIngredientsList(recipes).map((ingredient, i) => (
-              <li key={ i } data-testid={ `ingredient-${i}` }>
+              <li key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
                 {ingredient}
               </li>
             ))}
@@ -63,15 +68,24 @@ export default function RecipeDetails() {
           <section data-testid="instructions">
             { recipes.strInstructions}
           </section>
-          <video src={ recipes.strYoutube } data-testid="video" controls>
-            <track
-              kind="captions"
-              src="legenda.vtt"
-              srcLang="pt"
-              label="Português"
-              default
-            />
-          </video>
+          {
+            isMeals ? (
+              <div>
+
+                <video src={ recipes.strYoutube } data-testid="video" controls>
+                  <track
+                    kind="captions"
+                    src="legenda.vtt"
+                    srcLang="pt"
+                    label="Português"
+                    default
+                  />
+                </video>
+              </div>
+            ) : (
+              <p data-testid="recipe-category">{ recipes.strAlcoholic}</p>
+            )
+          }
         </div>
       ))}
     </div>
