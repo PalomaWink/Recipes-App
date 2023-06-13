@@ -20,39 +20,45 @@ const URL_INGREDIENT_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/filter
 const URL_NAME_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const URL_FIRST_LETTER_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
 
-const message = 'Sorry, we haven\'t found any recipes for these filters.';
-
 function Provider({ children }) {
   const location = useLocation();
   const history = useHistory();
-
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
+  const [requestApi, setRequestApi] = useState([]);
+
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
+  console.log(notSearch);
 
   const fetchApi = useCallback(async (url) => {
-    const result = await fetch(url);
-    const data = await result.json();
-    const { meals, drinks } = data;
-    // tentativa de alert
-    if (!meals || !drinks) {
-      return global.alert(message);
-    }
-    if (location.pathname === '/meals') {
-      if (meals.length === 1) {
-        history.push(`/meals/${data.meals[0].idMeal}`);
+    try {
+      const result = await fetch(url);
+      const data = await result.json();
+      const { meals, drinks } = data;
+
+      if (meals !== null && drinks !== null) {
+        if (location.pathname === '/meals') {
+          if (meals.length === 1) {
+            history.push(`/meals/${data.meals[0].idMeal}`);
+          }
+          return data.meals;
+        }
+        if (location.pathname === '/drinks') {
+          if (drinks.length === 1) {
+            history.push(`/drinks/${data.drinks[0].idDrink}`);
+          }
+          return data.drinks;
+        }
+      } else {
+        const message = 'Sorry, we haven\'t found any recipes for these filters.';
+        global.alert(message);
       }
-      return data.meals;
+    } catch (error) {
+      // console.log(error);
     }
-    if (location.pathname === '/drinks') {
-      if (drinks.length === 1) {
-        history.push(`/drinks/${data.drinks[0].idDrink}`);
-      }
-      return data.drinks;
-    }
-  }, [history, location]);
+  }, [history, location.pathname]);
 
   const fetchData = useCallback(async (search, inputText) => {
     let { results } = searchForFoods;
@@ -65,6 +71,9 @@ function Provider({ children }) {
 
     const urlFN = location.pathname === '/meals' ? `${URL_FIRST_LETTER_MEALS}${inputText}`
       : `${URL_FIRST_LETTER_DRINK}${inputText}`;
+
+    const url = location.pathname === '/meals' ? `${URL_NAME_FOODS_MEALS}`
+      : `${URL_NAME_DRINK}`;
 
     switch (search) {
     case 'Ingredient':
@@ -83,24 +92,28 @@ function Provider({ children }) {
       setSearchForFoods({ ...searchForFoods, results });
       break;
     default:
-      setSearchForFoods({ ...searchForFoods });
+      results = await fetchApi(url);
+      console.log(results);
+      setRequestApi(results);
+      setSearchForFoods({ ...searchForFoods, results });
       break;
     }
   }, [searchForFoods, location, fetchApi]);
 
+  console.log(searchForFoods);
   const value = useMemo(() => ({
     email,
     setEmail,
     searchForFoods,
     setSearchForFoods,
     fetchData,
+    fetchApi,
     headerState,
     setHeaderState,
     notSearch,
     setNotSearch,
-  }), [email,
-    searchForFoods,
-    headerState, setHeaderState, notSearch, setNotSearch, fetchData]);
+    requestApi,
+  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch, requestApi]);
 
   return (
     <Context.Provider value={ value }>
