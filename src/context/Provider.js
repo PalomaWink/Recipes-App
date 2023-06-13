@@ -26,7 +26,6 @@ function Provider({ children }) {
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
-  const [id, setid] = useState('');
 
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
@@ -104,9 +103,7 @@ function Provider({ children }) {
     setHeaderState,
     notSearch,
     setNotSearch,
-    id,
-    setid,
-  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch, setid, id]);
+  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch]);
 
   return (
     <Context.Provider value={ value }>
