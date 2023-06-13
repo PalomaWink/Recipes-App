@@ -18,7 +18,7 @@ export default function Profile(props) {
   }, []);
 
   const logout = () => {
-    localStorage.removeItem('user');
+    localStorage.clear();
     history.push('/');
   };
 
