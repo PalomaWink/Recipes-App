@@ -10,10 +10,10 @@ function Header() {
   };
   return (
     <header>
-      <h1 data-testid="page-title">{headerState.title}</h1>
       <Link to="/profile">
         <img src={ headerState.profile } alt="Profile" data-testid="profile-top-btn" />
       </Link>
+      <h1 data-testid="page-title">{headerState.title}</h1>
       {headerState.renderHeader && (
         <div>
           <button onClick={ handlerClick }>
