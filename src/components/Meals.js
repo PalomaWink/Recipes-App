@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link } from 'react-router-dom';
 import context from '../context/Context';
 
 export default function Meals() {
-  const { searchForFoods, setSearchForFoods } = useContext(context);
+  const { searchForFoods, setSearchForFoods, setid } = useContext(context);
   const { results } = searchForFoods;
   const [category, setCategory] = useState([]);
   const [activeFilter, setActiveFilter] = useState(true);
@@ -38,6 +38,10 @@ export default function Meals() {
     fetchCategory();
     fetchApi();
   }, []);
+
+  const hendlid = (id) => {
+    setid(id);
+  };
 
   const handlClickMeals = async (filter) => {
     setActiveFilter(!activeFilter);
@@ -78,7 +82,10 @@ export default function Meals() {
       {
         returnsTwelve.map((intem, index) => (
           <div key={ intem.idMeal } data-testid={ `${index}-recipe-card` }>
-            <Link to={ `/meals/${intem.idMeal}` }>
+            <Link
+              to={ `/meals/${intem.idMeal}` }
+              onClick={ () => hendlid(intem.idMeal) }
+            >
               <h3 data-testid={ `${index}-card-name` }>{intem.strMeal}</h3>
               <img
                 src={ intem.strMealThumb }

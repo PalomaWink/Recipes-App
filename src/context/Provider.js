@@ -26,10 +26,10 @@ function Provider({ children }) {
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
+  const [id, setid] = useState('');
 
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
-  console.log(notSearch);
 
   const fetchApi = useCallback(async (url) => {
     try {
@@ -93,7 +93,6 @@ function Provider({ children }) {
     }
   }, [searchForFoods, location, fetchApi]);
 
-  console.log(searchForFoods);
   const value = useMemo(() => ({
     email,
     setEmail,
@@ -105,7 +104,9 @@ function Provider({ children }) {
     setHeaderState,
     notSearch,
     setNotSearch,
-  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch]);
+    id,
+    setid,
+  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch, setid, id]);
 
   return (
     <Context.Provider value={ value }>

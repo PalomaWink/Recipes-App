@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
 
 export default function Drinks() {
-  const { searchForFoods, setSearchForFoods } = useContext(context);
+  const { searchForFoods, setSearchForFoods, setid } = useContext(context);
   const { results } = searchForFoods;
   const [category, setCategory] = useState([]);
   const [activeFilter, setActiveFilter] = useState(true);
@@ -37,6 +37,10 @@ export default function Drinks() {
     fetchApi();
     fetchCategory();
   }, []);
+
+  const hendlid = (id) => {
+    setid(id);
+  };
 
   const handlClickDrink = async (filter) => {
     setActiveFilter(!activeFilter);
@@ -77,12 +81,17 @@ export default function Drinks() {
       {
         returnsTwelve.map((intem, index) => (
           <div key={ intem.idDrink } data-testid={ `${index}-recipe-card` }>
-            <Link to={ `/drinks/${intem.idDrink}` }>
+            <Link
+              to={ `/drinks/${intem.idDrink}` }
+              onClick={ () => hendlid(intem.idDrink) }
+            >
               <h3 data-testid={ `${index}-card-name` }>{intem.strDrink}</h3>
               <img
                 src={ intem.strDrinkThumb }
                 alt="Profile"
                 data-testid={ `${index}-card-img` }
+                width="100px"
+                height="100px"
               />
             </Link>
 
