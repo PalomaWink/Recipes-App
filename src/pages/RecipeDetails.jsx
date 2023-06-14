@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 export default function RecipeDetails() {
   const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
   const URL_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
   const location = useLocation();
+  const history = useHistory();
   const [fetchApi, setFetchApi] = useState([]);
   const [isMeals, setIsMeals] = useState('');
   const [recommendationMeals, setrecommendationMeals] = useState([]);
   const [recommendationDrinks, setrecommendationDrinks] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [receipeInProgress, setReceipeInProgress] = useState('Start Recipe');
   const path = location.pathname.split('/')[1];
+  console.log(scrollPosition);
 
   const recommendation = async () => {
     const URL_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
@@ -56,7 +59,30 @@ export default function RecipeDetails() {
     recommendation();
   }, [location.pathname]);
 
-  console.log(scrollPosition);
+  /* const handleDoneRecipes = () => {
+    const pathLocation = location.pathname.split('/')[1];
+    const { id,
+      strArea,
+      strCategory,
+      strAlcoholic,
+      strMeal,
+      strDrink,
+      strMealThumb,
+      strDrinkThumb,
+      strTags } = fetchApi[0];
+    const dados = [{
+      id,
+      type: pathLocation,
+      nationality: strArea || '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic || '',
+      name: strDrink || strMeal,
+      image: strMealThumb || strDrinkThumb,
+      doneDate: 'quando-a-receita-foi-concluida',
+      tags: [strTags] || [],
+    }];
+    localStorage.setItem('doneRecipes', JSON.stringify([...dados, dados]));
+  }; */
 
   const handleScroll = () => {
     const { scrollLeft } = recommendationContainerRef.current;
@@ -73,6 +99,12 @@ export default function RecipeDetails() {
       }
     }
     return ingredientsList;
+  };
+
+  const btn = () => {
+    const pathId = location.pathname.split('/')[2];
+    setReceipeInProgress('Continue Recipe');
+    history.push(`${pathId}/in-progress`);
   };
   const number = 6;
   return (
@@ -151,9 +183,22 @@ export default function RecipeDetails() {
             </div>
           ))}
         </div>
-        <button data-testid="start-recipe-btn" style={ { position: 'fixed', bottom: 0 } }>
-          Start Recipe
-        </button>
+        { receipeInProgress ? (
+          <button
+            data-testid="start-recipe-btn"
+            style={ { position: 'fixed', bottom: 0 } }
+            onClick={ btn }
+          >
+            Start Recipe
+          </button>
+        ) : (
+          <button
+            data-testid="start-recipe-btn"
+            style={ { position: 'fixed', bottom: 0 } }
+            onClick={ btn }
+          >
+            Continue Recipe
+          </button>)}
       </div>
     </div>
   );

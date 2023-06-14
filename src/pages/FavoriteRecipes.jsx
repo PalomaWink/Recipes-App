@@ -26,6 +26,7 @@ export default function FavoriteRecipes() {
     setFilteredRecipes(favoriteRecipes);
   }, [favoriteRecipes]);
 
+  console.log(favoriteRecipes);
   // useEffect(() => {
   //   setFilteredRecipes(favoriteRecipes);
   // }, [favoriteRecipes]);
