@@ -199,6 +199,18 @@ export default function RecipeDetails() {
           >
             Continue Recipe
           </button>)}
+        <button
+          data-testid="share-btn"
+
+        >
+          compartilhar
+        </button>
+        <button
+          data-testid="favorite-btn"
+
+        >
+          favorita
+        </button>
       </div>
     </div>
   );
