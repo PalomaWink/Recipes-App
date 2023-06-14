@@ -4,6 +4,7 @@ import context from '../context/Context';
 
 export default function Meals() {
   const { fetchData, requestApi, setResults, results } = useContext(context);
+
   const [category, setCategory] = useState([]);
   const [activeFilter, setActiveFilter] = useState(true);
 

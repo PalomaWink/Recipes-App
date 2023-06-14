@@ -23,11 +23,12 @@ export default function FavoriteRecipes() {
     if (favoriteRecipesData) {
       setFavoriteRecipes(JSON.parse(favoriteRecipesData));
     }
-  }, []);
-
-  useEffect(() => {
     setFilteredRecipes(favoriteRecipes);
   }, [favoriteRecipes]);
+
+  // useEffect(() => {
+  //   setFilteredRecipes(favoriteRecipes);
+  // }, [favoriteRecipes]);
 
   const handleShare = (recipe) => {
     const recipeUrl = `http://localhost:3000/${recipe.type}s/${recipe.id}`;
