@@ -22,7 +22,6 @@ export default function Recipes(props) {
 
   return (
     <div>
-      <h1>Recipes</h1>
       <Header />
       { notSearch && <SearchBar />}
       {
