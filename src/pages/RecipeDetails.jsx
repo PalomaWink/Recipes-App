@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import clipboardCopy from 'clipboard-copy';
 import { useLocation, useHistory } from 'react-router-dom';
 import { CarouselProvider,
   Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
@@ -15,6 +16,8 @@ export default function RecipeDetails() {
   const [recommendationDrinks, setrecommendationDrinks] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [receipeInProgress, setReceipeInProgress] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+
   const path = location.pathname.split('/')[1];
   console.log(scrollPosition);
 
@@ -34,6 +37,14 @@ export default function RecipeDetails() {
       const data = await result.json();
       return setrecommendationDrinks(data.meals);
     }
+  };
+
+  const handleShare = () => {
+    const recipeLink = window.location.href;
+    console.log(recipeLink);
+    clipboardCopy(recipeLink)
+      .then(() => setCopySuccess(true))
+      .catch((error) => console.log(error));
   };
 
   const recommendationContainerRef = useRef(null);
@@ -115,6 +126,7 @@ export default function RecipeDetails() {
   return (
     <div>
       <h1>Tela de detalhes</h1>
+      {copySuccess && <p>Link copied!</p>}
       {fetchApi.map((recipes, index) => (
         <div key={ recipes.idMeal || recipes.idDrink }>
           <p data-testid="recipe-title">{recipes.strMeal || recipes.strDrink}</p>
@@ -180,21 +192,18 @@ export default function RecipeDetails() {
         </div>
       )}
       { receipeInProgress ? (
-        <button
-          data-testid="start-recipe-btn"
-          style={ { position: 'fixed', bottom: 0 } }
-          onClick={ btn }
+        <><button
+          data-testid="share-btn"
+          // style={ { marginLeft: '100%' } }
+          onClick={handleShare}
         >
           Start Recipe
-        </button>
-      ) : (
-        <button
-          data-testid="start-recipe-btn"
-          style={ { position: 'fixed', bottom: 0 } }
-          onClick={ btn }
+        </button><button
+          data-testid="favorite-btn"
+          style={{ marginLeft: '100%' }}
         >
-          Continue Recipe
-        </button>)}
+            Continue Recipe
+          </button></>)}
       <button
         data-testid="share-btn"
 
