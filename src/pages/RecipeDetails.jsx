@@ -11,7 +11,7 @@ export default function RecipeDetails() {
   const [recommendationMeals, setrecommendationMeals] = useState([]);
   const [recommendationDrinks, setrecommendationDrinks] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [receipeInProgress, setReceipeInProgress] = useState('Start Recipe');
+  const [receipeInProgress, setReceipeInProgress] = useState(false);
   const path = location.pathname.split('/')[1];
   console.log(scrollPosition);
 
@@ -103,7 +103,7 @@ export default function RecipeDetails() {
 
   const btn = () => {
     const pathId = location.pathname.split('/')[2];
-    setReceipeInProgress('Continue Recipe');
+    setReceipeInProgress(true);
     history.push(`${pathId}/in-progress`);
   };
   const number = 6;
@@ -160,8 +160,8 @@ export default function RecipeDetails() {
               data-testid={ `${index}-recommendation-card` }
             >
               <img
-                width="200px"
-                height="200px"
+                width="100px"
+                height="100px"
                 src={ recipe.strDrinkThumb }
                 alt="Recipe"
               />
