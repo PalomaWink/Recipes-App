@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { CarouselProvider,
+  Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 export default function RecipeDetails() {
   const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
@@ -59,6 +62,8 @@ export default function RecipeDetails() {
     recommendation();
   }, [location.pathname]);
 
+  console.log(recommendationMeals);
+  console.log(recommendationDrinks);
   /* const handleDoneRecipes = () => {
     const pathLocation = location.pathname.split('/')[1];
     const { id,
@@ -106,7 +111,7 @@ export default function RecipeDetails() {
     setReceipeInProgress(true);
     history.push(`${pathId}/in-progress`);
   };
-  const number = 6;
+  // const number = 6;
   return (
     <div>
       <h1>Tela de detalhes</h1>
@@ -147,71 +152,61 @@ export default function RecipeDetails() {
           )}
         </div>
       ))}
-      <div>
-        <h2>Recommended</h2>
-        <div
-          className="recommendation-container"
-          ref={ recommendationContainerRef }
-          onScroll={ handleScroll }
-        >
-          {recommendationMeals.slice(0, number).map((recipe, index) => (
-            <div
-              key={ recipe.idDrink }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <img
-                width="100px"
-                height="100px"
-                src={ recipe.strDrinkThumb }
-                alt="Recipe"
-              />
-              <p data-testid={ `${index}-recommendation-title` }>{recipe.strDrink}</p>
-            </div>
-          ))}
-          {recommendationDrinks.slice(0, number).map((recipe, index) => (
-            <div
-              key={ recipe.idMeal }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <img
-                width="200px"
-                height="200px"
-                src={ recipe.strMealThumb }
-                alt="Recipe"
-              />
-              <p data-testid={ `${index}-recommendation-title` }>{recipe.strMeal}</p>
-            </div>
-          ))}
+      {recommendationMeals && recommendationMeals.length > 0 && (
+        <div>
+          <h2>Recomendações de Refeições</h2>
+          <CarouselProvider
+            naturalSlideWidth={ 100 }
+            naturalSlideHeight={ 125 }
+            totalSlides={ recommendationMeals.length }
+            visibleSlides={ 3 }
+            dragEnabled={ false }
+            ref={ recommendationContainerRef }
+            onDragStart={ handleScroll }
+          >
+            <Slider>
+              {recommendationMeals.map((meal, index) => (
+                <Slide index={ index } key={ meal.idMeal }>
+                  <div>
+                    <h3>{meal.strMeal}</h3>
+                    <img src={ meal.strMealThumb } alt={ meal.strMeal } />
+                  </div>
+                </Slide>
+              ))}
+            </Slider>
+            <ButtonBack>Anterior</ButtonBack>
+            <ButtonNext>Próximo</ButtonNext>
+          </CarouselProvider>
         </div>
-        { receipeInProgress ? (
-          <button
-            data-testid="start-recipe-btn"
-            style={ { position: 'fixed', bottom: 0 } }
-            onClick={ btn }
-          >
-            Start Recipe
-          </button>
-        ) : (
-          <button
-            data-testid="start-recipe-btn"
-            style={ { position: 'fixed', bottom: 0 } }
-            onClick={ btn }
-          >
-            Continue Recipe
-          </button>)}
+      )}
+      { receipeInProgress ? (
         <button
-          data-testid="share-btn"
-
+          data-testid="start-recipe-btn"
+          style={ { position: 'fixed', bottom: 0 } }
+          onClick={ btn }
         >
-          compartilhar
+          Start Recipe
         </button>
+      ) : (
         <button
-          data-testid="favorite-btn"
-
+          data-testid="start-recipe-btn"
+          style={ { position: 'fixed', bottom: 0 } }
+          onClick={ btn }
         >
-          favorita
-        </button>
-      </div>
+          Continue Recipe
+        </button>)}
+      <button
+        data-testid="share-btn"
+
+      >
+        compartilhar
+      </button>
+      <button
+        data-testid="favorite-btn"
+
+      >
+        favorita
+      </button>
     </div>
   );
 }
