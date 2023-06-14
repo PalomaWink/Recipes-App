@@ -92,7 +92,7 @@ function Provider({ children }) {
       break;
     default:
       result = await fetchApi(url);
-      setRequestApi(results);
+      setRequestApi(result);
       setResults(result);
       break;
     }

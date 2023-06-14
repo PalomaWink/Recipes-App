@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import context from '../context/Context';
 
 export default function FavoriteRecipes() {
+  const { headerState, setHeaderState } = useContext(context);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
+    const updateState = () => {
+      setHeaderState({ ...headerState,
+        title: 'Favorite Recipes',
+        renderHeader: false });
+    };
+    updateState();
     const favoriteRecipesData = localStorage.getItem('favoriteRecipes');
     if (favoriteRecipesData) {
       setFavoriteRecipes(JSON.parse(favoriteRecipesData));
