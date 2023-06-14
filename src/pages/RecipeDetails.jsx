@@ -191,19 +191,32 @@ export default function RecipeDetails() {
           </CarouselProvider>
         </div>
       )}
-      { receipeInProgress ? (
-        <><button
-          data-testid="share-btn"
-          // style={ { marginLeft: '100%' } }
-          onClick={handleShare}
-        >
-          Start Recipe
-        </button><button
-          data-testid="favorite-btn"
-          style={{ marginLeft: '100%' }}
-        >
+      {receipeInProgress ? (
+        <>
+          <button
+            data-testid="share-btn"
+            // style={ { marginLeft: '100%' } }
+            onClick={ handleShare }
+          >
+            Start Recipe
+          </button>
+          <button
+            data-testid="favorite-btn"
+            style={ { marginLeft: '100%' } }
+          >
             Continue Recipe
-          </button></>)}
+          </button>
+        </>
+      ) : (
+        <button
+          data-testid="share-btn"
+          style={ { marginLeft: '100%' } }
+          onClick={ handleShare }
+        >
+          Share Recipe
+        </button>
+      )}
+
       <button
         data-testid="share-btn"
 
