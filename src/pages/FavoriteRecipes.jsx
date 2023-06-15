@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -23,13 +23,11 @@ export default function FavoriteRecipes() {
     if (favoriteRecipesData) {
       setFavoriteRecipes(JSON.parse(favoriteRecipesData));
     }
+  }, []);
+
+  useEffect(() => {
     setFilteredRecipes(favoriteRecipes);
   }, [favoriteRecipes]);
-
-  console.log(favoriteRecipes);
-  // useEffect(() => {
-  //   setFilteredRecipes(favoriteRecipes);
-  // }, [favoriteRecipes]);
 
   const handleShare = (recipe) => {
     const recipeUrl = `http://localhost:3000/${recipe.type}s/${recipe.id}`;
@@ -74,33 +72,27 @@ export default function FavoriteRecipes() {
         </div>
       )}
       <div>
-        <Link to="/favorite-recipes">
-          <button
-            type="button"
-            data-testid="filter-by-all-btn"
-            onClick={ handleFilterByAll }
-          >
-            All
-          </button>
-        </Link>
-        <Link to="/favorite-recipes/meals">
-          <button
-            type="button"
-            data-testid="filter-by-meal-btn"
-            onClick={ handleFilterByMeal }
-          >
-            Meals
-          </button>
-        </Link>
-        <Link to="/favorite-recipes/drinks">
-          <button
-            type="button"
-            data-testid="filter-by-drink-btn"
-            onClick={ handleFilterByDrink }
-          >
-            Drinks
-          </button>
-        </Link>
+        <button
+          type="button"
+          data-testid="filter-by-all-btn"
+          onClick={ handleFilterByAll }
+        >
+          All
+        </button>
+        <button
+          type="button"
+          data-testid="filter-by-meal-btn"
+          onClick={ handleFilterByMeal }
+        >
+          Meals
+        </button>
+        <button
+          type="button"
+          data-testid="filter-by-drink-btn"
+          onClick={ handleFilterByDrink }
+        >
+          Drinks
+        </button>
       </div>
       <div>
         {filteredRecipes.map((recipe, index) => (

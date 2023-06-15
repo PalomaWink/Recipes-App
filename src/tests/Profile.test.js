@@ -1,9 +1,7 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import App from '../App';
-// import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import Profile from '../pages/Profile';
 
 describe('Testa a Tela de Perfil', () => {
   it('Testa se as informações aparecem na Tela de Perfil', async () => {

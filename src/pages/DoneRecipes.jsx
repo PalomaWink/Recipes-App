@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import Header from '../components/Header';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -71,33 +71,27 @@ export default function DoneRecipes() {
         </div>
       )}
       <div>
-        <Link to="/done-recipes">
-          <button
-            type="button"
-            data-testid="filter-by-all-btn"
-            onClick={ handleFilterByAll }
-          >
-            All
-          </button>
-        </Link>
-        <Link to="/done-recipes/meals">
-          <button
-            type="button"
-            data-testid="filter-by-meal-btn"
-            onClick={ handleFilterByMeal }
-          >
-            Meals
-          </button>
-        </Link>
-        <Link to="/done-recipes/drinks">
-          <button
-            type="button"
-            data-testid="filter-by-drink-btn"
-            onClick={ handleFilterByDrink }
-          >
-            Drinks
-          </button>
-        </Link>
+        <button
+          type="button"
+          data-testid="filter-by-all-btn"
+          onClick={ handleFilterByAll }
+        >
+          All
+        </button>
+        <button
+          type="button"
+          data-testid="filter-by-meal-btn"
+          onClick={ handleFilterByMeal }
+        >
+          Meals
+        </button>
+        <button
+          type="button"
+          data-testid="filter-by-drink-btn"
+          onClick={ handleFilterByDrink }
+        >
+          Drinks
+        </button>
       </div>
       <div>
         {filteredRecipes.map((recipe, index) => (
