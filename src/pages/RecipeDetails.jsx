@@ -3,6 +3,7 @@ import clipboardCopy from 'clipboard-copy';
 import { useLocation, useHistory } from 'react-router-dom';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import shareIcon from '../images/shareIcon.svg';
 
 export default function RecipeDetails() {
   const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
@@ -18,9 +19,9 @@ export default function RecipeDetails() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [favoriteExistent, setFavoriteExistent] = useState([]);
   const path = location.pathname.split('/')[1];
   console.log(scrollPosition);
-  console.log(setFavorite);
   const recommendation = async () => {
     const URL_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
     const URL_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
@@ -47,10 +48,13 @@ export default function RecipeDetails() {
 
   useEffect(() => {
     const urlParts = location.pathname.split('/');
-    const conditional = urlParts[1] === 'meals';
     const urlId = urlParts[urlParts.length - 1];
+    const existingFavorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    const isIdInArray = existingFavorites.some((recipe) => recipe.id === urlParts[2]);
+    setFavorite(!!isIdInArray);
+    setFavoriteExistent(existingFavorites);
+    const conditional = urlParts[1] === 'meals';
     setIsMeals(conditional);
-
     const fetchRecipe = async (id) => {
       if (location.pathname === `/meals/${id}`) {
         const result = await fetch(`${URL_FOOD}${id}`);
@@ -69,6 +73,7 @@ export default function RecipeDetails() {
   }, [location.pathname]);
 
   const handleFavorite = () => {
+    setFavorite(!favorite);
     const pathId = location.pathname.split('/')[2];
     const favoriteRecipe = fetchApi
       .find((recipe) => recipe.idMeal === pathId || recipe.idDrink === pathId);
@@ -93,12 +98,9 @@ export default function RecipeDetails() {
           image: strMealThumb || strDrinkThumb,
         };
         // Atualiza o estado favoriteRecipes
-        setFavoriteRecipes(
-          (prevFavoriteRecipes) => [...prevFavoriteRecipes, newFavoriteRecipe],
-        );
-        // Salva no localStorage
-        localStorage.setItem('favoriteRecipes', JSON
-          .stringify([...favoriteRecipes, newFavoriteRecipe]));
+        const updatedFavorites = [...favoriteExistent, newFavoriteRecipe];
+        setFavoriteRecipes(updatedFavorites);
+        localStorage.setItem('favoriteRecipes', JSON.stringify(updatedFavorites));
       }
     }
   };
@@ -225,14 +227,18 @@ export default function RecipeDetails() {
         onClick={ handleShare }
         style={ { marginBottom: '10%' } }
       >
-        compartilhar
+        <img
+          src={ shareIcon }
+          alt="favorite"
+          style={ { cursor: 'pointer' } }
+        />
       </button>
       <button
-        data-testid="favorite-btn"
         type="button"
         onClick={ handleFavorite }
       >
         <img
+          data-testid="favorite-btn"
           src={ favorite ? blackHeartIcon : whiteHeartIcon }
           alt="favorite"
           style={ { cursor: 'pointer' } }
