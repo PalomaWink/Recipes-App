@@ -5,11 +5,10 @@ import Context from './Context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-// criar estado para cada
+// EVITAR USAR O MESMO ESTADO PARA O FETCH DA API E ATUALIZAÇÃO DOS ESTADOS
 const INICIAL_STATE = {
   inputSearch: '',
   inputRadio: '',
-  results: [],
 };
 
 const URL_INGREDIENT_MEALS = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=';
@@ -27,10 +26,11 @@ function Provider({ children }) {
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
   const [requestApi, setRequestApi] = useState([]);
+  // substituir o objeto de results pelo estado local
+  const [results, setResults] = useState([]);
 
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
-  console.log(notSearch);
 
   const fetchApi = useCallback(async (url) => {
     try {
@@ -61,8 +61,7 @@ function Provider({ children }) {
   }, [history, location.pathname]);
 
   const fetchData = useCallback(async (search, inputText) => {
-    let { results } = searchForFoods;
-
+    let result;
     const urlIngredient = location.pathname === '/meals'
       ? `${URL_INGREDIENT_MEALS}${inputText}` : `${URL_INGREDIENT_DRINK}${inputText}`;
 
@@ -77,30 +76,28 @@ function Provider({ children }) {
 
     switch (search) {
     case 'Ingredient':
-      results = await fetchApi(urlIngredient);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(urlIngredient);
+      setResults(result);
       break;
     case 'Name':
-      results = await fetchApi(urlName);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(urlName);
+      setResults(result);
       break;
     case 'FirstLetter':
       if (inputText.length > 1 && urlFN) {
         global.alert('Your search must have only 1 (one) character');
       }
-      results = await fetchApi(urlFN);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(urlFN);
+      setResults(result);
       break;
     default:
-      results = await fetchApi(url);
-      console.log(results);
-      setRequestApi(results);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(url);
+      setRequestApi(result);
+      setResults(result);
       break;
     }
-  }, [searchForFoods, location, fetchApi]);
+  }, [searchForFoods, location, fetchApi, results]);
 
-  console.log(searchForFoods);
   const value = useMemo(() => ({
     email,
     setEmail,
@@ -113,7 +110,11 @@ function Provider({ children }) {
     notSearch,
     setNotSearch,
     requestApi,
-  }), [email, searchForFoods, fetchData, fetchApi, headerState, notSearch, requestApi]);
+    results,
+    setResults,
+  }), [email, searchForFoods, fetchData, fetchApi, headerState,
+    notSearch, requestApi, results,
+    setResults]);
 
   return (
     <Context.Provider value={ value }>

@@ -6,8 +6,7 @@ import context from '../context/Context';
 export default function Profile(props) {
   const { history } = props;
   const { headerState, setHeaderState } = useContext(context);
-  const { email } = JSON.parse(localStorage.user);
-
+  const email = JSON.parse(localStorage.getItem('user')) || '';
   useEffect(() => {
     const updateState = () => {
       setHeaderState({ ...headerState,
@@ -26,7 +25,7 @@ export default function Profile(props) {
     <div>
       <Header />
 
-      <h3 data-testid="profile-email">{email}</h3>
+      <h3 data-testid="profile-email">{email.email}</h3>
 
       <button
         type="button"

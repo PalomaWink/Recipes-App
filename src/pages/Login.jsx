@@ -17,6 +17,7 @@ function Login(props) {
   };
 
   const handleSubmit = () => {
+    console.log(email);
     localStorage.setItem('user', JSON.stringify({ email }));
     history.push('/meals');
   };

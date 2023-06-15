@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import Header from '../components/Header';
-import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import context from '../context/Context';
 
 export default function DoneRecipes() {
-  // const { history } = props;
-  // const { headerState,
-  //   setHeaderState, notSearch } = useContext(context);
   const { headerState, setHeaderState } = useContext(context);
   const [doneRecipes, setDoneRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const history = useHistory();
-  // useEffect(() => {
-  //   const { location: { pathname } } = history;
-  //   const updateState = () => {
-  //     setHeaderState({ ...headerState,
-  //       title: pathname === '/meals' ? 'Meals' : 'Drinks' });
-  //   };
-  //   updateState();
-  // }, []);
+
+  useEffect(() => {
+    setHeaderState({ ...headerState,
+      title: 'Done Recipes',
+      renderHeader: false });
+  }, []);
   useEffect(() => {
     const doneRecipesData = localStorage.getItem('doneRecipes');
     if (doneRecipesData) {
@@ -177,6 +172,7 @@ export default function DoneRecipes() {
           </div>
         ))}
       </div>
+    </div>
   );
 }
 
