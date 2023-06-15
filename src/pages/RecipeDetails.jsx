@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { useLocation, useHistory } from 'react-router-dom';
-// import { CarouselProvider,
-//   Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
-// import 'pure-react-carousel/dist/react-carousel.es.css';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 export default function RecipeDetails() {
   const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
@@ -14,29 +13,38 @@ export default function RecipeDetails() {
   const [isMeals, setIsMeals] = useState('');
   const [recommendationMeals, setrecommendationMeals] = useState([]);
   const [recommendationDrinks, setrecommendationDrinks] = useState([]);
-  // const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [receipeInProgress, setReceipeInProgress] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [favorite, setFavorite] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
-
   const path = location.pathname.split('/')[1];
-
+ 
   const recommendation = async () => {
     const URL_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
     const URL_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-
     if (path === 'meals') {
       const result = await fetch(URL_DRINKS);
       const data = await result.json();
-      console.log(data.drinks);
       return setrecommendationMeals(data.drinks);
     }
-
     if (path === 'drinks') {
       const result = await fetch(URL_MEALS);
       const data = await result.json();
       return setrecommendationDrinks(data.meals);
     }
+  };
+  const handlefavorite = () => {
+    // const updateRecipes = [...favoriteRecipes, recipe];
+    // setFavoriteRecipes(updateRecipes);
+    setFavorite(true);
+  };
+
+  const handleUnfavorite = () => {
+    // const filterUnfavorite = favoriteRecipes
+    //   .filter((recipe) => recipe.id !== fetchApi[0].idMeal || fetchApi[0].idDrink);
+    // setFavoriteRecipes(filterUnfavorite);
+    setFavorite(false);
   };
 
   const handleShare = () => {
@@ -47,7 +55,7 @@ export default function RecipeDetails() {
       .catch((error) => console.log(error));
   };
 
-  // const recommendationContainerRef = useRef(null);
+  const recommendationContainerRef = useRef(null);
 
   useEffect(() => {
     const urlParts = location.pathname.split('/');
@@ -61,13 +69,16 @@ export default function RecipeDetails() {
         const data = await result.json();
         setFetchApi(data.meals);
       }
-
       if (location.pathname === `/drinks/${id}`) {
         const result = await fetch(`${URL_DRINK}${id}`);
         const data = await result.json();
         setFetchApi(data.drinks);
       }
     };
+    const favoriteRecipesData = localStorage.getItem('favoriteRecipes');
+    if (favoriteRecipesData) {
+      setFavoriteRecipes(JSON.parse(favoriteRecipesData));
+    } else { setFavoriteRecipes([]); }
 
     fetchRecipe(urlId);
     recommendation();
@@ -110,6 +121,36 @@ export default function RecipeDetails() {
           .stringify([...favoriteRecipes, newFavoriteRecipe]));
       }
     }
+   
+  /* const handleDoneRecipes = () => {
+    const pathLocation = location.pathname.split('/')[1];
+    const { id,
+      strArea,
+      strCategory,
+      strAlcoholic,
+      strMeal,
+      strDrink,
+      strMealThumb,
+      strDrinkThumb,
+      strTags } = fetchApi[0];
+    const dados = [{
+      id,
+      type: pathLocation,
+      nationality: strArea || '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic || '',
+      name: strDrink || strMeal,
+      image: strMealThumb || strDrinkThumb,
+      doneDate: 'quando-a-receita-foi-concluida',
+      tags: [strTags] || [],
+    }];
+    localStorage.setItem('doneRecipes', JSON.stringify([...dados, dados]));
+  }; */
+
+  const handleScroll = () => {
+    const { scrollLeft } = recommendationContainerRef.current;
+    setScrollPosition(scrollLeft);
+
   };
 
   const getIngredientsList = (recipe) => {
@@ -130,7 +171,8 @@ export default function RecipeDetails() {
     setReceipeInProgress(true);
     history.push(`${pathId}/in-progress`);
   };
-  // const number = 6;
+  const number = 6;
+  const teste = ['block', 'block', 'none', 'none', 'none', 'none'];
   return (
     <div>
       <h1>Tela de detalhes</h1>
@@ -173,33 +215,44 @@ export default function RecipeDetails() {
         </div>
       ))}
       {copySuccess && <p>Link copied!</p>}
-      {/* {recommendationMeals && recommendationMeals.length > 0 && (
-        <div>
-          <h2>Recomendações de Refeições</h2>
-          <CarouselProvider
-            naturalSlideWidth={ 100 }
-            naturalSlideHeight={ 125 }
-            totalSlides={ recommendationMeals.length }
-            visibleSlides={ 3 }
-            dragEnabled={ false }
-            ref={ recommendationContainerRef }
-            onDragStart={ handleScroll }
+      <h2>Recommended</h2>
+      <div
+        className="recommendation-container"
+        ref={ recommendationContainerRef }
+        onScroll={ handleScroll }
+      >
+        {recommendationMeals.slice(0, number).map((recipe, index) => (
+          <div
+            key={ recipe.idDrink }
+            data-testid={ `${index}-recommendation-card` }
+            style={ { display: teste[index] } }
           >
-            <Slider>
-              {recommendationMeals.map((meal, index) => (
-                <Slide index={ index } key={ meal.idMeal }>
-                  <div>
-                    <h3>{meal.strMeal}</h3>
-                    <img src={ meal.strMealThumb } alt={ meal.strMeal } />
-                  </div>
-                </Slide>
-              ))}
-            </Slider>
-            <ButtonBack>Anterior</ButtonBack>
-            <ButtonNext>Próximo</ButtonNext>
-          </CarouselProvider>
-        </div>
-      )} */}
+            <img
+              width="150px"
+              height="150px"
+              src={ recipe.strDrinkThumb }
+              alt="Recipe"
+            />
+            <p data-testid={ `${index}-recommendation-title` }>{recipe.strDrink}</p>
+          </div>
+        ))}
+        {recommendationDrinks.slice(0, number).map((recipe, index) => (
+          <div
+            key={ recipe.idMeal }
+            data-testid={ `${index}-recommendation-card` }
+            style={ { display: teste[index] } }
+          >
+            <img
+              width="200px"
+              height="200px"
+              src={ recipe.strMealThumb }
+              alt="Recipe"
+            />
+            <p data-testid={ `${index}-recommendation-title` }>{recipe.strMeal}</p>
+          </div>
+        ))}
+      </div>
+
       { receipeInProgress ? (
         <button
           data-testid="start-recipe-btn"
@@ -226,9 +279,16 @@ export default function RecipeDetails() {
       </button>
       <button
         data-testid="favorite-btn"
-        onClick={ handleFavorite }
+        type="button"
+        // onClick={ favorite ? handleUnfavorite() : handlefavorite(fetchApi[0]) }
+        onClick={ handlefavorite }
       >
-        favorita
+        <img
+          data-testid="favorite-btn"
+          src={ favorite ? blackHeartIcon : whiteHeartIcon }
+          alt="favorite"
+          style={ { cursor: 'pointer' } }
+        />
       </button>
     </div>
   );
