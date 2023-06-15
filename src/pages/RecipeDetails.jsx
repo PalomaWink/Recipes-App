@@ -3,6 +3,7 @@ import clipboardCopy from 'clipboard-copy';
 import { useLocation, useHistory } from 'react-router-dom';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import '../style/RecipeDetails.css';
 
 export default function RecipeDetails() {
   const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
