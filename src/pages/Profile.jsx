@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import context from '../context/Context';
 
 export default function Profile(props) {
@@ -52,6 +53,7 @@ export default function Profile(props) {
       >
         Logout
       </button>
+      <Footer />
     </div>
   );
 }
