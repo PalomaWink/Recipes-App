@@ -1,11 +1,66 @@
-
 * {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-family: 'Ubuntu', sans-serif;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 body {
-    background-color: #fdf9f0;
+  background-color: #fdf9f0;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.0rem;
+  margin: 1rem 0;
+  color: #000000;
+  letter-spacing: 2px; /* Aumenta o espaçamento entre as letras */
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave ao texto */
+}
+
+.header_recipes {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+  max-width: 600px;
+}
+
+.header_recipes img,
+.header_recipes p,
+.header_recipes ul,
+.header_recipes section,
+.header_recipes video {
+  margin: 10px;
+}
+
+.header_recipes p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.header_recipes img {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.share-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 0;
+  right: 2.5rem; 
+  margin-top: 0.5rem; 
+  margin-right: 0.5rem;
+  display: inline-block;
+  border-radius: 8px;
 }

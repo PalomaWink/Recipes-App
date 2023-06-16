@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { useLocation, useHistory } from 'react-router-dom';
+import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../style/RecipeDetails.css';
@@ -51,7 +52,6 @@ export default function RecipeDetails() {
     const conditional = urlParts[1] === 'meals';
     const urlId = urlParts[urlParts.length - 1];
     setIsMeals(conditional);
-
     const fetchRecipe = async (id) => {
       if (location.pathname === `/meals/${id}`) {
         const result = await fetch(`${URL_FOOD}${id}`);
@@ -64,11 +64,9 @@ export default function RecipeDetails() {
         setFetchApi(data.drinks);
       }
     };
-
     fetchRecipe(urlId);
     recommendation();
   }, [location.pathname]);
-
   const handleFavorite = () => {
     const pathId = location.pathname.split('/')[2];
     const favoriteRecipe = fetchApi
@@ -107,7 +105,6 @@ export default function RecipeDetails() {
     const { scrollLeft } = recommendationContainerRef.current;
     setScrollPosition(scrollLeft);
   };
-
   const getIngredientsList = (recipe) => {
     const ingredientsList = [];
     const number = 20;
@@ -128,10 +125,10 @@ export default function RecipeDetails() {
   const number = 6;
   const teste = ['block', 'block', 'none', 'none', 'none', 'none'];
   return (
-    <div>
-      <h1>Tela de detalhes</h1>
+    <div className="container">
+      <h1 className="title">Tela de detalhes</h1>
       {fetchApi.map((recipes, index) => (
-        <div key={ recipes.idMeal || recipes.idDrink }>
+        <div key={ recipes.idMeal || recipes.idDrink } className="header_recipes">
           <p data-testid="recipe-title">{recipes.strMeal || recipes.strDrink}</p>
           <img
             width="100px"
@@ -225,13 +222,19 @@ export default function RecipeDetails() {
         data-testid="share-btn"
         onClick={ handleShare }
         style={ { marginBottom: '10%' } }
+        className="share-btn"
       >
-        compartilhar
+        <img
+          src={ shareIcon }
+          alt="Share"
+          style={ { cursor: 'pointer' } }
+        />
       </button>
       <button
         data-testid="favorite-btn"
         type="button"
         onClick={ handleFavorite }
+        className="favorite-btn"
       >
         <img
           src={ favorite ? blackHeartIcon : whiteHeartIcon }
