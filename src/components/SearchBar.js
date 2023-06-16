@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import context from '../context/Context';
+import '../style/HeaderAlign.css';
+import '../style/SearchBar.css';
 
 // importar para o header e criar estados locais
 
@@ -24,9 +26,10 @@ export default function SearchBar() {
       ...searchForFoods, [target.name]: target.value });
   };
   return (
-    <div>
+    <div className="HeaderAlign sBar">
       <label htmlFor="inputSearch">
         <input
+          className="text"
           type="text"
           id="inputSearch"
           name="inputSearch"
@@ -36,7 +39,9 @@ export default function SearchBar() {
           onChange={ handleChangeColuns }
         />
       </label>
+
       <input
+        className="radio"
         data-testid="ingredient-search-radio"
         type="radio"
         id="inputRadioIngredient"
@@ -45,9 +50,10 @@ export default function SearchBar() {
         checked={ searchForFoods.inputRadio === 'Ingredient' }
         onChange={ handleChangeColuns }
       />
-      <label htmlFor="inputRadioIngredient">Ingredient</label>
+      <label className="radio" htmlFor="inputRadioIngredient">Ingredient</label>
 
       <input
+        className="radio"
         data-testid="name-search-radio"
         type="radio"
         id="inputRadioName"
@@ -56,8 +62,9 @@ export default function SearchBar() {
         checked={ searchForFoods.inputRadio === 'Name' }
         onChange={ handleChangeColuns }
       />
-      <label htmlFor="inputRadioName">Name</label>
+      <label className="radio" htmlFor="inputRadioName">Name</label>
       <input
+        className="radio"
         data-testid="first-letter-search-radio"
         type="radio"
         id="inputFirstLetter"
@@ -66,7 +73,7 @@ export default function SearchBar() {
         checked={ searchForFoods.inputRadio === 'FirstLetter' }
         onChange={ handleChangeColuns }
       />
-      <label htmlFor="inputFirstLetter">First letter</label>
+      <label className="radio" htmlFor="inputFirstLetter">First letter</label>
       <button
         type="button"
         data-testid="exec-search-btn"
@@ -75,6 +82,7 @@ export default function SearchBar() {
         Search
       </button>
     </div>
+
   );
 }
 

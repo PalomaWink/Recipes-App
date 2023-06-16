@@ -6,10 +6,6 @@
   padding: 0;
 }
 
-body {
-  background-color: black;
-}
-
 .login {
   align-items: center;
   background: url('../images/BackgrounsCapa.png') no-repeat center center fixed;
@@ -46,7 +42,7 @@ body {
   z-index: 2;
 }
 
-input {
+.login input {
   border-radius: 5px;
   font-family: Ubuntu , sans-serif;
   font-size: 14px;
@@ -56,8 +52,8 @@ input {
   width: 300px;
 }
 
-button {
-  background-color: #a8784d;
+.login button {
+  background-color: #830000;
   border-radius: 5px;
   box-shadow: 2px 3px 5px 3px black;
   color: #ebdddd;
@@ -70,7 +66,11 @@ button {
   width: 100px;
 }
 
-img {
+.login button:disabled {
+  opacity: 85%;
+}
+
+.login img {
   border-radius: 50px;
   position: relative;
   width: 140px;

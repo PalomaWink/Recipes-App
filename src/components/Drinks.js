@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
+import '../style/HeaderAlign.css';
 
 export default function Drinks() {
   const { fetchData, requestApi, setResults, results } = useContext(context);
@@ -46,7 +47,7 @@ export default function Drinks() {
   };
 
   return (
-    <div>
+    <div className="HeaderAlign">
       {
         categoryFive.map((categor, index) => (
           <button
