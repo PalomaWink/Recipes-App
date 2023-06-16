@@ -78,7 +78,6 @@ export default function RecipeDetails() {
         || recipe.id === favoriteRecipe.idDrink,
       );
       if (!isAlreadyFavorited) {
-        // Adiciona a receita aos favoritos
         const { idMeal, idDrink, strArea,
           strCategory, strAlcoholic, strMeal,
           strDrink, strMealThumb, strDrinkThumb } = favoriteRecipe;
@@ -91,11 +90,9 @@ export default function RecipeDetails() {
           name: strMeal || strDrink,
           image: strMealThumb || strDrinkThumb,
         };
-        // Atualiza o estado favoriteRecipes
         setFavoriteRecipes(
           (prevFavoriteRecipes) => [...prevFavoriteRecipes, newFavoriteRecipe],
         );
-        // Salva no localStorage
         localStorage.setItem('favoriteRecipes', JSON
           .stringify([...favoriteRecipes, newFavoriteRecipe]));
       }
@@ -126,19 +123,25 @@ export default function RecipeDetails() {
   const teste = ['block', 'block', 'none', 'none', 'none', 'none'];
   return (
     <div className="container">
-      <h1 className="title">Tela de detalhes</h1>
       {fetchApi.map((recipes, index) => (
         <div key={ recipes.idMeal || recipes.idDrink } className="header_recipes">
-          <p data-testid="recipe-title">{recipes.strMeal || recipes.strDrink}</p>
-          <img
-            width="100px"
-            height="100px"
-            src={ recipes.strMealThumb || recipes.strDrinkThumb }
-            alt={ recipes.strMeal || recipes.strDrink }
-            data-testid="recipe-photo"
-          />
-          <p data-testid="recipe-category">{recipes.strCategory}</p>
-          <ul data-testid={ `${index}-ingredient-name-and-measure` }>
+          <div className="title_recipes_details">
+            <p data-testid="recipe-title">{recipes.strMeal || recipes.strDrink}</p>
+          </div>
+          <div className="image_recipes">
+            <img
+              src={ recipes.strMealThumb || recipes.strDrinkThumb }
+              alt={ recipes.strMeal || recipes.strDrink }
+              data-testid="recipe-photo"
+            />
+          </div>
+          <div className="recipe_category">
+            <p data-testid="recipe-category">{recipes.strCategory}</p>
+          </div>
+          <ul
+            data-testid={ `${index}-ingredient-name-and-measure` }
+            className="ingredient_list"
+          >
             <strong>Ingredients:</strong>
             {getIngredientsList(recipes).map((ingredient, i) => (
               <li key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
@@ -178,8 +181,6 @@ export default function RecipeDetails() {
             style={ { display: teste[index] } }
           >
             <img
-              width="150px"
-              height="150px"
               src={ recipe.strDrinkThumb }
               alt="Recipe"
             />
@@ -193,8 +194,6 @@ export default function RecipeDetails() {
             style={ { display: teste[index] } }
           >
             <img
-              width="200px"
-              height="200px"
               src={ recipe.strMealThumb }
               alt="Recipe"
             />
