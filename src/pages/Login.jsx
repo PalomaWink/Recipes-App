@@ -35,7 +35,6 @@ function Login(props) {
           onChange={ ({ target }) => setEmail(target.value) }
           placeholder="Insira seu Email"
         />
-        <br />
         <input
           type="password"
           value={ password }
