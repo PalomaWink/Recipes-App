@@ -27,6 +27,7 @@ export default function SearchBar() {
     <div>
       <label htmlFor="inputSearch">
         <input
+          className="input_login"
           type="text"
           id="inputSearch"
           name="inputSearch"
