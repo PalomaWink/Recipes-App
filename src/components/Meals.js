@@ -2,6 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
 import '../style/HeaderAlign.css';
+import '../css/meals.css';
+import chickenImage from '../images/chicken.png';
+import plate from '../images/plate.png';
+import beefImage from '../images/meat.png';
+import breakfast from '../images/breakfast.png';
+import cupcake from '../images/cupcake.png';
+import goat from '../images/goat.png';
 
 export default function Meals() {
   const { fetchData, requestApi, setResults, results } = useContext(context);
@@ -49,38 +56,95 @@ export default function Meals() {
 
   return (
     <div className="HeaderAlign">
-      {
-        categoryFive.map((categor, index) => (
-          <button
-            data-testid={ `${categor.strCategory}-category-filter` }
-            key={ index }
-            onClick={ () => handlClickMeals(categor.strCategory) }
-          >
-            {categor.strCategory}
-          </button>
-        ))
-      }
-      <button
-        data-testid="All-category-filter"
-        onClick={ handlClickAll }
-      >
-        ALL
-      </button>
-      {
-        returnsTwelve.map((intem, index) => (
-          <div key={ intem.idMeal } data-testid={ `${index}-recipe-card` }>
-            <Link to={ `/meals/${intem.idMeal}` }>
-              <h3 data-testid={ `${index}-card-name` }>{intem.strMeal}</h3>
-              <img
-                src={ intem.strMealThumb }
-                alt="Profile"
-                data-testid={ `${index}-card-img` }
-              />
-            </Link>
-
-          </div>
-        ))
-      }
+      <div className="filters-container">
+        {
+          categoryFive.map((categor, index) => (
+            <button
+              className="filters"
+              data-testid={ `${categor.strCategory}-category-filter` }
+              key={ index }
+              onClick={ () => handlClickMeals(categor.strCategory) }
+            >
+              {categor.strCategory}
+              {categor.strCategory === 'Chicken' && (
+                <img
+                  className="filter-image"
+                  src={ chickenImage }
+                  alt={ categor.strCategory }
+                />
+              )}
+              {categor.strCategory === 'Beef' && (
+                <img
+                  className="filter-image"
+                  src={ beefImage }
+                  alt={ categor.strCategory }
+                />
+              )}
+              {categor.strCategory === 'Breakfast' && (
+                <img
+                  className="filter-image"
+                  src={ breakfast }
+                  alt={ categor.strCategory }
+                />
+              )}
+              {categor.strCategory === 'Dessert' && (
+                <img
+                  className="filter-image"
+                  src={ cupcake }
+                  alt={ categor.strCategory }
+                />
+              )}
+              {categor.strCategory === 'Goat' && (
+                <img
+                  className="filter-image"
+                  src={ goat }
+                  alt={ categor.strCategory }
+                />
+              )}
+            </button>
+          ))
+        }
+        <button
+          className="filters"
+          data-testid="All-category-filter"
+          onClick={ handlClickAll }
+        >
+          All
+          <img
+            src={ plate }
+            className="filter-image"
+            alt="All foods"
+            style={ { width: '50px' } }
+          />
+        </button>
+      </div>
+      <div className="teste">
+        {
+          returnsTwelve.map((intem, index) => (
+            <div
+              className="recipe-card"
+              key={ intem.idMeal }
+              data-testid={ `${index}-recipe-card` }
+            >
+              <Link to={ `/meals/${intem.idMeal}` }>
+                <h3
+                  className="title"
+                  data-testid={ `${index}-card-name` }
+                >
+                  {intem.strMeal}
+                </h3>
+                <img
+                  className="recipe-image"
+                  src={ intem.strMealThumb }
+                  alt="Profile"
+                  width={ 200 }
+                  data-testid={ `${index}-card-img` }
+                />
+              </Link>
+            </div>
+          ))
+        }
+      </div>
     </div>
   );
 }
