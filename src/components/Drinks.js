@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
+import '../style/HeaderAlign.css';
 import coktail from '../images/cocktail.png';
 import ordinaryDrink from '../images/ordinary.png';
 import shake from '../images/shake.png';
@@ -53,7 +54,7 @@ export default function Drinks() {
   };
 
   return (
-    <div className="container">
+    <div className="HeaderAlign">
       <div className="filters-container">
         {
           categoryFive.map((categor, index) => (

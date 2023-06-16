@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import context from '../context/Context';
+import userIcon from '../images/user.png';
+import '../style/Profile.css';
 
 export default function Profile(props) {
   const { history } = props;
@@ -23,9 +25,9 @@ export default function Profile(props) {
   };
 
   return (
-    <div>
+    <div className="profile">
       <Header />
-
+      <img className="icon" src={ userIcon } alt="Icon Profile" />
       <h3 data-testid="profile-email">{email.email}</h3>
 
       <button

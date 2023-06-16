@@ -6,10 +6,6 @@
   padding: 0;
 }
 
-body {
-  background-color: black;
-}
-
 .login {
   align-items: center;
   background: url('../images/BackgrounsCapa.png') no-repeat center center fixed;
@@ -57,7 +53,7 @@ body {
 }
 
 .login button {
-  background-color: #a8784d;
+  background-color: #830000;
   border-radius: 5px;
   box-shadow: 2px 3px 5px 3px black;
   color: #ebdddd;
@@ -68,6 +64,10 @@ body {
   letter-spacing: 2px;
   margin: 15px;
   width: 100px;
+}
+
+.login button:disabled {
+  opacity: 85%;
 }
 
 .login img {

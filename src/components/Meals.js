@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import context from '../context/Context';
+import '../style/HeaderAlign.css';
 import '../css/meals.css';
 import chickenImage from '../images/chicken.png';
 import plate from '../images/plate.png';
@@ -54,7 +55,7 @@ export default function Meals() {
   };
 
   return (
-    <div className="container">
+    <div className="HeaderAlign">
       <div className="filters-container">
         {
           categoryFive.map((categor, index) => (
