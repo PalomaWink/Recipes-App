@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap') ;
 
 * {
   border: 0;
@@ -23,8 +23,8 @@ body {
 }
 
 .login:before {
-  background-color: rgba(0,0,0,0.5);
-  content: " ";
+  background-color: rgba(0, 0, 0, 0.5);
+  content: '';
   height: 100vh;
   left: 0;
   position: absolute;
@@ -48,7 +48,7 @@ body {
 
 input {
   border-radius: 5px;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Ubuntu' , sans-serif;
   font-size: 14px;
   height: 20%;
   margin-top: 5px;
@@ -57,13 +57,13 @@ input {
 }
 
 button {
-  background-color: #A8784D;
+  background-color: #a8784d;
   border-radius: 5px;
   box-shadow: 2px 3px 5px 3px black;
   color: #ebdddd;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Ubuntu' , sans-serif;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 700;
   height: 40px;
   letter-spacing: 2px;
   margin: 15px;
