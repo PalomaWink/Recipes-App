@@ -137,7 +137,6 @@ export default function Meals() {
                   className="recipe-image"
                   src={ intem.strMealThumb }
                   alt="Profile"
-                  width={ 200 }
                   data-testid={ `${index}-card-img` }
                 />
               </Link>
