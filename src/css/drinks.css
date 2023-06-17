@@ -29,7 +29,6 @@ a {
   flex-direction: column;
   height: 50px;
   justify-content: flex-end;
-  margin-top: 60px;
   max-width: 60px;
 }
 
@@ -68,6 +67,6 @@ a {
 
 .recipe-card img {
   border-radius: 10px;
-  margin: 20px;
-  width: 140px;
+  margin: 23px;
+  width: 35vw;
 }
