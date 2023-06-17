@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { useLocation, useHistory } from 'react-router-dom';
-import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
+import share from '../images/share.png';
+import heartWhite from '../images/heartWhite.png';
+import heart from '../images/heart.png';
+import { URL_FOOD, URL_DRINK, URL_MEALS, URL_DRINKS } from '../service/Links';
 import '../style/RecipeDetails.css';
 
 export default function RecipeDetails() {
-  const URL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
-  const URL_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
   const location = useLocation();
   const history = useHistory();
   const [fetchApi, setFetchApi] = useState([]);
@@ -24,8 +23,6 @@ export default function RecipeDetails() {
   console.log(scrollPosition);
   console.log(setFavorite);
   const recommendation = async () => {
-    const URL_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
-    const URL_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
     if (path === 'meals') {
       const result = await fetch(URL_DRINKS);
       const data = await result.json();
@@ -37,16 +34,13 @@ export default function RecipeDetails() {
       return setrecommendationDrinks(data.meals);
     }
   };
-
   const handleShare = () => {
     const recipeLink = window.location.href;
     clipboardCopy(recipeLink)
       .then(() => setCopySuccess(true))
       .catch((error) => console.log(error));
   };
-
   const recommendationContainerRef = useRef(null);
-
   useEffect(() => {
     const urlParts = location.pathname.split('/');
     const conditional = urlParts[1] === 'meals';
@@ -72,7 +66,6 @@ export default function RecipeDetails() {
     const favoriteRecipe = fetchApi
       .find((recipe) => recipe.idMeal === pathId || recipe.idDrink === pathId);
     if (favoriteRecipe) {
-      // Verifica se a receita já está favoritada
       const isAlreadyFavorited = favoriteRecipes.some(
         (recipe) => recipe.id === favoriteRecipe.idMeal
         || recipe.id === favoriteRecipe.idDrink,
@@ -124,51 +117,61 @@ export default function RecipeDetails() {
   return (
     <div className="container">
       {fetchApi.map((recipes, index) => (
-        <div key={ recipes.idMeal || recipes.idDrink } className="header_recipes">
-          <div className="title_recipes_details">
+        <div key={ recipes.idMeal || recipes.idDrink } className="header-recipes">
+          <div className="title-recipes-details">
             <p data-testid="recipe-title">{recipes.strMeal || recipes.strDrink}</p>
           </div>
-          <div className="image_recipes">
+          <div className="image-recipes">
             <img
               src={ recipes.strMealThumb || recipes.strDrinkThumb }
               alt={ recipes.strMeal || recipes.strDrink }
               data-testid="recipe-photo"
             />
           </div>
-          <div className="recipe_category">
+          <div className="recipe-category">
             <p data-testid="recipe-category">{recipes.strCategory}</p>
           </div>
-          <ul
-            data-testid={ `${index}-ingredient-name-and-measure` }
-            className="ingredient_list"
-          >
+          <div className="ingredients-instruction">
             <strong>Ingredients:</strong>
-            {getIngredientsList(recipes).map((ingredient, i) => (
-              <li key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
-                {ingredient}
-              </li>
-            ))}
-          </ul>
-          <section data-testid="instructions">{recipes.strInstructions}</section>
+          </div>
+          <div className="ingredient-container">
+            <ul
+              data-testid={ `${index}-ingredient-name-and-measure` }
+              className="ingredient-list"
+            >
+              {getIngredientsList(recipes).map((ingredient, i) => (
+                <li key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
+                  {ingredient}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="ingredients-instruction">
+            <strong>Instructions:</strong>
+          </div>
+          <section
+            className="instruction"
+            data-testid="instructions"
+          >
+            {recipes.strInstructions}
+          </section>
           {isMeals ? (
-            <div>
-              <video src={ recipes.strYoutube } data-testid="video" controls>
-                <track
-                  kind="captions"
-                  src="legenda.vtt"
-                  srcLang="pt"
-                  label="Português"
-                  default
-                />
-              </video>
-            </div>
+            <video src={ recipes.strYoutube } data-testid="video" controls>
+              <track
+                kind="captions"
+                src="legenda.vtt"
+                srcLang="pt"
+                label="Português"
+                default
+              />
+            </video>
           ) : (
             <p data-testid="recipe-category">{recipes.strAlcoholic}</p>
           )}
         </div>
       ))}
       {copySuccess && <p>Link copied!</p>}
-      <h2>Recommended</h2>
+      <div className="ingredients-instruction"><strong>Recommended</strong></div>
       <div
         className="recommendation-container"
         ref={ recommendationContainerRef }
@@ -179,11 +182,15 @@ export default function RecipeDetails() {
             key={ recipe.idDrink }
             data-testid={ `${index}-recommendation-card` }
             style={ { display: teste[index] } }
+            className="recomendation-card"
           >
-            <img
-              src={ recipe.strDrinkThumb }
-              alt="Recipe"
-            />
+            <div className="recomendation-card-image">
+              <img
+                src={ recipe.strDrinkThumb }
+                alt="Recipe"
+                width={ 280 }
+              />
+            </div>
             <p data-testid={ `${index}-recommendation-title` }>{recipe.strDrink}</p>
           </div>
         ))}
@@ -192,6 +199,7 @@ export default function RecipeDetails() {
             key={ recipe.idMeal }
             data-testid={ `${index}-recommendation-card` }
             style={ { display: teste[index] } }
+            className="recomendation-card"
           >
             <img
               src={ recipe.strMealThumb }
@@ -203,16 +211,16 @@ export default function RecipeDetails() {
       </div>
       { receipeInProgress ? (
         <button
+          className="start-continue-recipe-btn"
           data-testid="start-recipe-btn"
-          style={ { position: 'fixed', bottom: 0 } }
           onClick={ btn }
         >
           Start Recipe
         </button>
       ) : (
         <button
+          className="start-continue-recipe-btn"
           data-testid="start-recipe-btn"
-          style={ { position: 'fixed', bottom: 0 } }
           onClick={ btn }
         >
           Continue Recipe
@@ -220,25 +228,21 @@ export default function RecipeDetails() {
       <button
         data-testid="share-btn"
         onClick={ handleShare }
-        style={ { marginBottom: '10%' } }
         className="share-btn"
       >
         <img
-          src={ shareIcon }
+          src={ share }
           alt="Share"
-          style={ { cursor: 'pointer' } }
         />
       </button>
       <button
         data-testid="favorite-btn"
-        type="button"
         onClick={ handleFavorite }
         className="favorite-btn"
       >
         <img
-          src={ favorite ? blackHeartIcon : whiteHeartIcon }
+          src={ favorite ? heart : heartWhite }
           alt="favorite"
-          style={ { cursor: 'pointer' } }
         />
       </button>
     </div>
