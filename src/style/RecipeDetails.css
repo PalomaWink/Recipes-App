@@ -15,8 +15,9 @@ body {
 }
 
 .header-recipes p {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 700;
+  text-align: center;
 }
 
 .header-recipes img {
@@ -134,20 +135,26 @@ video {
 .recommendation-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin-bottom: 20px;
+  margin: 20px;
   overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  white-space: nowrap;
+}
+
+.recomendation-card {
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  width: 50%;
 }
 
 .recomendation-card-image img {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  height: auto;
   margin: 5px;
-  max-height: 150px;
-  max-width: 150px;
+  max-height: 100px;
+  max-width: 100px;
   object-fit: cover;
-  width: 100%;
 }
 
 .recomendation-card p {

@@ -14,14 +14,11 @@ export default function RecipeDetails() {
   const [isMeals, setIsMeals] = useState('');
   const [recommendationMeals, setrecommendationMeals] = useState([]);
   const [recommendationDrinks, setrecommendationDrinks] = useState([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [receipeInProgress, setReceipeInProgress] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
-  const [favoriteExistent, setFavoriteExistent] = useState([]);
   const path = location.pathname.split('/')[1];
-  console.log(scrollPosition);
   const recommendation = async () => {
     if (path === 'meals') {
       const result = await fetch(URL_DRINKS);
@@ -40,14 +37,12 @@ export default function RecipeDetails() {
       .then(() => setCopySuccess(true))
       .catch((error) => console.log(error));
   };
-  const recommendationContainerRef = useRef(null);
   useEffect(() => {
     const urlParts = location.pathname.split('/');
     const urlId = urlParts[urlParts.length - 1];
     const existingFavorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
     const isIdInArray = existingFavorites.some((recipe) => recipe.id === urlParts[2]);
     setFavorite(!!isIdInArray);
-    setFavoriteExistent(existingFavorites);
     const conditional = urlParts[1] === 'meals';
     setIsMeals(conditional);
     const fetchRecipe = async (id) => {
@@ -97,10 +92,6 @@ export default function RecipeDetails() {
       }
     }
   };
-  const handleScroll = () => {
-    const { scrollLeft } = recommendationContainerRef.current;
-    setScrollPosition(scrollLeft);
-  };
   const getIngredientsList = (recipe) => {
     const ingredientsList = [];
     const number = 20;
@@ -119,7 +110,6 @@ export default function RecipeDetails() {
     history.push(`${pathId2}/in-progress`);
   };
   const number = 6;
-  const teste = ['block', 'block', 'none', 'none', 'none', 'none'];
   return (
     <div className="container">
       {fetchApi.map((recipes, index) => (
@@ -180,21 +170,17 @@ export default function RecipeDetails() {
       <div className="ingredients-instruction"><strong>Recommended</strong></div>
       <div
         className="recommendation-container"
-        ref={ recommendationContainerRef }
-        onScroll={ handleScroll }
       >
         {recommendationMeals.slice(0, number).map((recipe, index) => (
           <div
             key={ recipe.idDrink }
             data-testid={ `${index}-recommendation-card` }
-            style={ { display: teste[index] } }
             className="recomendation-card"
           >
             <div className="recomendation-card-image">
               <img
                 src={ recipe.strDrinkThumb }
                 alt="Recipe"
-                width={ 280 }
               />
             </div>
             <p data-testid={ `${index}-recommendation-title` }>{recipe.strDrink}</p>
@@ -204,13 +190,14 @@ export default function RecipeDetails() {
           <div
             key={ recipe.idMeal }
             data-testid={ `${index}-recommendation-card` }
-            style={ { display: teste[index] } }
             className="recomendation-card"
           >
-            <img
-              src={ recipe.strMealThumb }
-              alt="Recipe"
-            />
+            <div className="recomendation-card-image">
+              <img
+                src={ recipe.strMealThumb }
+                alt="Recipe"
+              />
+            </div>
             <p data-testid={ `${index}-recommendation-title` }>{recipe.strMeal}</p>
           </div>
         ))}
