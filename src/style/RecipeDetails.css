@@ -33,8 +33,12 @@ body {
   top: 0;
 }
 
+.share-btn img {
+  height: 30px;
+  width: 30px;
+}
+
 .favorite-btn {
-  border-radius: 8px;
   display: inline-block;
   margin-right: 0.5rem;
   margin-top: 0.5rem;
@@ -43,21 +47,27 @@ body {
   top: 0;
 }
 
+.favorite-btn img {
+  height: 30px;
+  width: 30px;
+}
+
+
 .image-recipes {
   position: relative;
 }
 
 .image-recipes img {
+  height: 100%;
   max-height: 200px;
   max-width: 640px;
   object-fit: cover;
   transform: scale(1.1);
   width: 100%;
-  height: 100%;
 }
 
 .recipe-category {
-  color: white;
+  color: black;
   left: 0;
   padding: 5px;
   position: absolute;
@@ -82,8 +92,8 @@ body {
 }
 
 .ingredients-instruction {
-  font-weight: 700;
   font-size: 20pt;
+  font-weight: 700;
   line-height: 20px;
   margin: 20px;
 }
@@ -103,7 +113,7 @@ body {
   font-size: 13pt;
 }
 
-.instruction{
+.instruction {
   border: 1px solid #830000;
   border-radius: 10px;
   font-size: 13pt;
@@ -148,9 +158,9 @@ video {
 
 .start-continue-recipe-btn {
   background-color: #830000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   bottom: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   color: white;
   font-size: 1.2rem;
   margin-bottom: 10%;

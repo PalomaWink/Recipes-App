@@ -21,7 +21,6 @@ export default function RecipeDetails() {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const path = location.pathname.split('/')[1];
   console.log(scrollPosition);
-  console.log(setFavorite);
   const recommendation = async () => {
     if (path === 'meals') {
       const result = await fetch(URL_DRINKS);
@@ -86,6 +85,7 @@ export default function RecipeDetails() {
         setFavoriteRecipes(
           (prevFavoriteRecipes) => [...prevFavoriteRecipes, newFavoriteRecipe],
         );
+        setFavorite(true);
         localStorage.setItem('favoriteRecipes', JSON
           .stringify([...favoriteRecipes, newFavoriteRecipe]));
       }
