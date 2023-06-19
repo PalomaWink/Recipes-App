@@ -19,6 +19,7 @@ export default function RecipeDetails() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [favoriteExistent, setFavoriteExistent] = useState([]);
   const path = location.pathname.split('/')[1];
   console.log(scrollPosition);
   const recommendation = async () => {
@@ -42,8 +43,12 @@ export default function RecipeDetails() {
   const recommendationContainerRef = useRef(null);
   useEffect(() => {
     const urlParts = location.pathname.split('/');
-    const conditional = urlParts[1] === 'meals';
     const urlId = urlParts[urlParts.length - 1];
+    const existingFavorites = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    const isIdInArray = existingFavorites.some((recipe) => recipe.id === urlParts[2]);
+    setFavorite(!!isIdInArray);
+    setFavoriteExistent(existingFavorites);
+    const conditional = urlParts[1] === 'meals';
     setIsMeals(conditional);
     const fetchRecipe = async (id) => {
       if (location.pathname === `/meals/${id}`) {
@@ -61,6 +66,7 @@ export default function RecipeDetails() {
     recommendation();
   }, [location.pathname]);
   const handleFavorite = () => {
+    setFavorite(!favorite);
     const pathId = location.pathname.split('/')[2];
     const favoriteRecipe = fetchApi
       .find((recipe) => recipe.idMeal === pathId || recipe.idDrink === pathId);
@@ -242,6 +248,7 @@ export default function RecipeDetails() {
       >
         <img
           src={ favorite ? heart : heartWhite }
+          data-testid="favorite-btn"
           alt="favorite"
         />
       </button>

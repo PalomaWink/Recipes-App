@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap') ;
+
 * {
   border: 0;
   margin: 0;
@@ -33,11 +35,9 @@ body {
 
 .input_login {
   align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 100px;
+  height: 150px;
   justify-content: center;
   margin: 10px;
   padding: 10px;
@@ -46,19 +46,32 @@ body {
   z-index: 2;
 }
 
-.input_login input {
+.login input {
   border-radius: 5px;
-  height: 100px;
+  font-family: Ubuntu , sans-serif;
+  font-size: 14px;
+  height: 20%;
+  margin-top: 5px;
+  padding-left: 10px;
   width: 300px;
 }
 
 .login button {
-  background-color: #a8784d;
-  border: 1px solid #ccc;
+  background-color: #830000;
   border-radius: 5px;
-  color: black;
-  margin: 5px;
-  padding: 5px;
+  box-shadow: 2px 3px 5px 3px black;
+  color: #ebdddd;
+  font-family: Ubuntu , sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  height: 40px;
+  letter-spacing: 2px;
+  margin: 15px;
+  width: 100px;
+}
+
+.login button:disabled {
+  opacity: 85%;
 }
 
 .login img {
