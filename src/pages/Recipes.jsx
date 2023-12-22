@@ -5,6 +5,7 @@ import context from '../context/Context';
 import SearchBar from '../components/SearchBar';
 import Meals from '../components/Meals';
 import Drinks from '../components/Drinks';
+import Footer from '../components/Footer';
 
 export default function Recipes(props) {
   const { history } = props;
@@ -22,14 +23,13 @@ export default function Recipes(props) {
 
   return (
     <div>
-      <h1>Recipes</h1>
       <Header />
       { notSearch && <SearchBar />}
       {
         (headerState.title === 'Meals') ? <Meals />
           : <Drinks />
       }
-
+      <Footer />
     </div>
   );
 }

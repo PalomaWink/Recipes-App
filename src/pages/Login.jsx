@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import context from '../context/Context';
+import logo from '../images/Borcelle.png';
+import '../style/Login.css';
 
 function Login(props) {
   const { history } = props;
@@ -17,35 +19,39 @@ function Login(props) {
   };
 
   const handleSubmit = () => {
+    console.log(email);
     localStorage.setItem('user', JSON.stringify({ email }));
     history.push('/meals');
   };
 
   return (
-    <section>
-      <input
-        type="email"
-        value={ email.email }
-        data-testid="email-input"
-        onChange={ ({ target }) => setEmail(target.value) }
-        placeholder="Insira seu Email"
-      />
-      <br />
-      <input
-        type="password"
-        value={ password }
-        data-testid="password-input"
-        onChange={ ({ target }) => setPassword(target.value) }
-        placeholder="Insira sua Senha"
-      />
-      <button
-        type="button"
-        data-testid="login-submit-btn"
-        disabled={ validateInputs() }
-        onClick={ handleSubmit }
-      >
-        Entrar
-      </button>
+    <section className="login">
+      <img src={ logo } alt="logo" />
+      <div className="input_login">
+        <input
+          type="email"
+          value={ email.email }
+          data-testid="email-input"
+          onChange={ ({ target }) => setEmail(target.value) }
+          placeholder="Insira seu Email"
+        />
+        <input
+          type="password"
+          value={ password }
+          data-testid="password-input"
+          onChange={ ({ target }) => setPassword(target.value) }
+          placeholder="Insira sua Senha"
+        />
+        <div />
+        <button
+          type="button"
+          data-testid="login-submit-btn"
+          disabled={ validateInputs() }
+          onClick={ handleSubmit }
+        >
+          Entrar
+        </button>
+      </div>
     </section>
   );
 }

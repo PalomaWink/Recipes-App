@@ -5,11 +5,10 @@ import Context from './Context';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-// criar estado para cada
+// EVITAR USAR O MESMO ESTADO PARA O FETCH DA API E ATUALIZAÇÃO DOS ESTADOS
 const INICIAL_STATE = {
   inputSearch: '',
   inputRadio: '',
-  results: [],
 };
 
 const URL_INGREDIENT_MEALS = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=';
@@ -20,43 +19,49 @@ const URL_INGREDIENT_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/filter
 const URL_NAME_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const URL_FIRST_LETTER_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=';
 
-const message = 'Sorry, we haven\'t found any recipes for these filters.';
-
 function Provider({ children }) {
   const location = useLocation();
   const history = useHistory();
-
   const [email, setEmail] = useState('');
   const [searchForFoods, setSearchForFoods] = useState(INICIAL_STATE);
   const [notSearch, setNotSearch] = useState(false);
+  const [requestApi, setRequestApi] = useState([]);
+  // substituir o objeto de results pelo estado local
+  const [results, setResults] = useState([]);
+
   const [headerState, setHeaderState] = useState({
     profile: profileIcon, search: searchIcon, renderHeader: true, title: '' });
 
   const fetchApi = useCallback(async (url) => {
-    const result = await fetch(url);
-    const data = await result.json();
-    const { meals, drinks } = data;
-    // tentativa de alert
-    if (!meals || !drinks) {
-      return global.alert(message);
-    }
-    if (location.pathname === '/meals') {
-      if (meals.length === 1) {
-        history.push(`/meals/${data.meals[0].idMeal}`);
+    try {
+      const result = await fetch(url);
+      const data = await result.json();
+      const { meals, drinks } = data;
+
+      if (meals !== null && drinks !== null) {
+        if (location.pathname === '/meals') {
+          if (meals.length === 1) {
+            history.push(`/meals/${data.meals[0].idMeal}`);
+          }
+          return data.meals;
+        }
+        if (location.pathname === '/drinks') {
+          if (drinks.length === 1) {
+            history.push(`/drinks/${data.drinks[0].idDrink}`);
+          }
+          return data.drinks;
+        }
+      } else {
+        const message = 'Sorry, we haven\'t found any recipes for these filters.';
+        global.alert(message);
       }
-      return data.meals;
+    } catch (error) {
+      // console.log(error);
     }
-    if (location.pathname === '/drinks') {
-      if (drinks.length === 1) {
-        history.push(`/drinks/${data.drinks[0].idDrink}`);
-      }
-      return data.drinks;
-    }
-  }, [history, location]);
+  }, [history, location.pathname]);
 
   const fetchData = useCallback(async (search, inputText) => {
-    let { results } = searchForFoods;
-
+    let result;
     const urlIngredient = location.pathname === '/meals'
       ? `${URL_INGREDIENT_MEALS}${inputText}` : `${URL_INGREDIENT_DRINK}${inputText}`;
 
@@ -66,27 +71,32 @@ function Provider({ children }) {
     const urlFN = location.pathname === '/meals' ? `${URL_FIRST_LETTER_MEALS}${inputText}`
       : `${URL_FIRST_LETTER_DRINK}${inputText}`;
 
+    const url = location.pathname === '/meals' ? `${URL_NAME_FOODS_MEALS}`
+      : `${URL_NAME_DRINK}`;
+
     switch (search) {
     case 'Ingredient':
-      results = await fetchApi(urlIngredient);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(urlIngredient);
+      setResults(result);
       break;
     case 'Name':
-      results = await fetchApi(urlName);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(urlName);
+      setResults(result);
       break;
     case 'FirstLetter':
       if (inputText.length > 1 && urlFN) {
         global.alert('Your search must have only 1 (one) character');
       }
-      results = await fetchApi(urlFN);
-      setSearchForFoods({ ...searchForFoods, results });
+      result = await fetchApi(urlFN);
+      setResults(result);
       break;
     default:
-      setSearchForFoods({ ...searchForFoods });
+      result = await fetchApi(url);
+      setRequestApi(result);
+      setResults(result);
       break;
     }
-  }, [searchForFoods, location, fetchApi]);
+  }, [searchForFoods, location, fetchApi, results]);
 
   const value = useMemo(() => ({
     email,
@@ -94,13 +104,17 @@ function Provider({ children }) {
     searchForFoods,
     setSearchForFoods,
     fetchData,
+    fetchApi,
     headerState,
     setHeaderState,
     notSearch,
     setNotSearch,
-  }), [email,
-    searchForFoods,
-    headerState, setHeaderState, notSearch, setNotSearch, fetchData]);
+    requestApi,
+    results,
+    setResults,
+  }), [email, searchForFoods, fetchData, fetchApi, headerState,
+    notSearch, requestApi, results,
+    setResults]);
 
   return (
     <Context.Provider value={ value }>
